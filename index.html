@@ -104,8 +104,8 @@
     }
 
     .brand-mark {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 16px;
       background: linear-gradient(135deg, var(--primary), #69c6c7);
       color: #fff;
@@ -273,15 +273,19 @@
 
     .quick-item b { color: var(--ink); }
 
+    .organ-selector-panel {
+      margin-bottom: 18px;
+    }
+
     .workspace {
       display: grid;
-      grid-template-columns: 240px minmax(0, 1fr) 300px;
+      grid-template-columns: minmax(0, 1fr) 300px;
       gap: 18px;
       align-items: start;
     }
 
     .workspace > .viewer-card { min-width: 0; }
-    .workspace > .panel, .workspace > .side-column { min-width: 0; }
+    .workspace > .side-column { min-width: 0; }
 
     .panel { padding: 16px; }
 
@@ -310,8 +314,18 @@
       padding: 12px 13px;
     }
 
+    .organ-selector-panel .panel-heading {
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .organ-selector-panel .search-box {
+      max-width: 420px;
+    }
+
     .system-grid {
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 10px;
     }
 
@@ -319,10 +333,10 @@
       width: 100%;
       text-align: left;
       display: grid;
-      grid-template-columns: 44px 1fr auto;
-      gap: 12px;
+      grid-template-columns: 40px 1fr auto;
+      gap: 10px;
       align-items: center;
-      padding: 12px;
+      padding: 10px;
       border-radius: 18px;
       background: #fff;
       color: var(--ink);
@@ -334,8 +348,8 @@
     .system-card.active { background: var(--primary-soft); border-color: rgba(31, 111, 120, 0.45); }
 
     .icon-bubble {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 16px;
       display: grid;
       place-items: center;
@@ -609,8 +623,8 @@
     .print-only { display: none; }
 
     @media (max-width: 1080px) {
-      .workspace { grid-template-columns: 220px minmax(0, 1fr); }
-      .side-column { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .workspace { grid-template-columns: 1fr; }
+      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 860px) {
@@ -649,7 +663,6 @@
           </div>
         </div>
         <div class="nav-actions">
-          <button class="btn ghost small" id="patientModeBtn" type="button">Patient view</button>
           <button class="btn small" id="embedManagerBtn" type="button">Manage model links</button>
           <button class="btn primary small" onclick="window.print()" type="button">Print summary</button>
         </div>
@@ -661,7 +674,7 @@
         <div class="hero-card">
 <h1 id="hero-title">
    <span class="hero-title-text">Show the anatomy. Explain the radiation. Reduce uncertainty.</span>
-</h1>          <p class="lead">A clinic-friendly interface for demonstrating a cancer treatment sites. Open an embedded 3D anatomy model viewr, and walk through radiation treatment logistics, expected side effects, and practical supportive care.</p>
+</h1>          <p class="lead">A clinic-friendly interface for demonstrating cancer treatment sites. Open an embedded 3D anatomy model viewer, then walk through radiation treatment logistics, expected side effects, and practical supportive care.</p>
           <div class="hero-metrics" aria-label="App capabilities">
                  </div>
         </div>
@@ -675,11 +688,10 @@
             <div class="quick-item"><span>②</span><div><b>Show model</b><br />Use a published BioDigital iframe URL for each model.</div></div>
             <div class="quick-item"><span>③</span><div><b>Explain plan</b><br />Enter total dose and fractions in patient-friendly language.</div></div>
           </div>
-          
+        </aside>
       </section>
 
-      <section class="workspace" aria-label="Cancer education workspace">
-        <aside class="panel" aria-label="Organ systems">
+        <section class="panel organ-selector-panel" aria-label="Organ systems">
           <div class="panel-heading">
             <div>
               <h2>Organ systems</h2>
@@ -691,8 +703,9 @@
             <input id="searchInput" type="search" placeholder="Search CNS, prostate, lung..." autocomplete="off" />
           </div>
           <div class="system-grid" id="systemGrid"></div>
-        </aside>
+        </section>
 
+      <section class="workspace" aria-label="Cancer education workspace">
         <section class="viewer-card" aria-live="polite">
           <div class="viewer-toolbar">
             <div class="viewer-title">
@@ -1035,8 +1048,7 @@
     const state = {
       systemId: systems[0].id,
       siteId: systems[0].sites[0].id,
-      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks },
-      patientMode: false
+      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks }
     };
 
     const $ = (id) => document.getElementById(id);
@@ -1231,13 +1243,6 @@
       else openEmbedModal();
     }
 
-    function togglePatientMode() {
-      state.patientMode = !state.patientMode;
-      document.body.classList.toggle("patient-mode", state.patientMode);
-      $("patientModeBtn").textContent = state.patientMode ? "Clinician view" : "Patient view";
-      document.querySelector(".panel").style.display = state.patientMode ? "none" : "block";
-      document.querySelector(".workspace").style.gridTemplateColumns = state.patientMode ? "minmax(0, 1fr) 300px" : "";
-    }
 
     function updateAll() {
       renderSystems($("searchInput").value);
@@ -1255,7 +1260,6 @@
     $("saveLinksBtn").addEventListener("click", saveEmbedLinks);
     $("clearLinksBtn").addEventListener("click", clearEmbedLinks);
     $("openModelBtn").addEventListener("click", openCurrentModel);
-    $("patientModeBtn").addEventListener("click", togglePatientMode);
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
 
