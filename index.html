@@ -405,6 +405,57 @@
       background: #f1f5f7;
     }
 
+
+    /* Mobile iframe interaction support. This keeps the embedded BioDigital viewer active
+       on touch devices rather than replacing it with a full-screen launch card. */
+    .viewer-frame-wrap,
+    iframe.model-frame {
+      touch-action: manipulation;
+      -webkit-overflow-scrolling: touch;
+    }
+
+
+    .mobile-viewer-launch {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 22px;
+      text-align: center;
+      background:
+        linear-gradient(135deg, rgba(31, 111, 120, 0.14), rgba(139, 92, 246, 0.10)),
+        #eff5f6;
+    }
+
+    .mobile-viewer-launch.show { display: grid; }
+
+    .mobile-viewer-card {
+      width: min(560px, 100%);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(219, 228, 234, 0.96);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 18px 38px rgba(24, 33, 47, 0.10);
+    }
+
+    .mobile-viewer-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.35rem;
+      letter-spacing: -0.035em;
+    }
+
+    .mobile-viewer-card p {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .mobile-viewer-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
     /* BioDigital switches its internal information panel from a side column to a
        closed drawer when the viewer is under 960px wide. The model card is capped
        below that breakpoint so the card stays visually flush with the embed. */
@@ -482,6 +533,111 @@
     }
 
     .side-card { padding: 18px; }
+
+    .setup-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .setup-media {
+      min-height: 310px;
+      border: 1px dashed rgba(31, 111, 120, 0.35);
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(31, 111, 120, 0.10), rgba(139, 92, 246, 0.10)),
+        #f8fbfc;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+    }
+
+    .setup-media strong {
+      display: block;
+      color: var(--ink);
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .setup-media p {
+      margin: 0;
+      max-width: 44ch;
+    }
+
+    .setup-placeholder-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 30px rgba(24, 33, 47, 0.08);
+      font-size: 2.1rem;
+    }
+
+    .setup-caption {
+      display: grid;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .setup-caption p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .setup-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .setup-dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .setup-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #c9d6dd;
+    }
+
+    .setup-dot.active {
+      width: 22px;
+      background: var(--primary);
+    }
+
+    .dose-inline-card {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 2px;
+    }
+
+    .dose-heading-inline {
+      margin-bottom: 8px;
+    }
+
+    .clinician-notes-wide {
+      margin-top: 18px;
+    }
+
+    .clinician-notes-wide textarea {
+      min-height: 140px;
+    }
 
     .dose-grid {
       display: grid;
@@ -661,7 +817,7 @@
       .workspace { grid-template-columns: 1fr; }
       .workspace > .viewer-card,
       .workspace > .side-column { max-width: none; justify-self: stretch; }
-      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .side-column { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 860px) {
@@ -760,7 +916,17 @@
                 <button class="btn primary" id="emptyManageBtn" type="button">Add BioDigital model URL</button>
               </div>
             </div>
-            <iframe class="model-frame" id="modelFrame" title="Embedded 3D anatomy model" allowfullscreen hidden></iframe>
+            <iframe class="model-frame" id="modelFrame" title="Embedded 3D anatomy model" allow="fullscreen; xr-spatial-tracking; accelerometer; gyroscope; autoplay; encrypted-media; clipboard-read; clipboard-write" allowfullscreen loading="eager" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" hidden></iframe>
+            <div class="mobile-viewer-launch" id="mobileViewerLaunch" hidden>
+              <div class="mobile-viewer-card">
+                <h3>BioDigital embedded viewer fallback</h3>
+                <p>The embedded viewer is set to load on mobile. If your browser blocks BioDigital login inside the iframe, open the model directly as a fallback.</p>
+                <div class="mobile-viewer-actions">
+                  <a class="btn primary" id="mobileOpenModelLink" href="#" target="_blank" rel="noopener noreferrer">Open full-screen model</a>
+                  <button class="btn" id="mobileTryEmbedBtn" type="button">Try embedded viewer</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="content-section">
             <div class="panel-heading">
@@ -791,44 +957,72 @@
           </div>
         </section>
 
-        <aside class="side-column" aria-label="Treatment details">
-          <section class="side-card">
+        <aside class="side-column" aria-label="Treatment setup and dose details">
+          <section class="side-card setup-card">
             <div class="panel-heading">
               <div>
-                <h3>Dose explanation</h3>
-                <p>For patient-facing discussion</p>
+                <h3>Treatment setup preview</h3>
+                <p id="setupSubtitle">Positioning, machine, and immobilization</p>
+              </div>
+              <button class="btn small" id="setupNextBtn" type="button" aria-label="Show next setup image">→</button>
+            </div>
+
+            <div class="setup-media" id="setupMedia" role="img" aria-label="Treatment setup image placeholder">
+              <div class="setup-placeholder-icon" id="setupIcon">🛏️</div>
+              <div>
+                <strong id="setupImageTitle">Patient position</strong>
+                <p id="setupImageText">Placeholder for patient positioning image.</p>
               </div>
             </div>
-            <div class="dose-grid">
-              <div class="field">
-                <label for="totalDose">Total dose, Gy</label>
-                <input id="totalDose" type="number" min="0" step="0.1" value="50" />
+
+            <div class="setup-caption">
+              <div>
+                <span class="setup-label">Technique selected</span>
+                <strong id="setupTechniqueLabel">IMRT/VMAT</strong>
               </div>
-              <div class="field">
-                <label for="fractions">Fractions</label>
-                <input id="fractions" type="number" min="1" step="1" value="25" />
-              </div>
-              <div class="field">
-                <label for="treatmentsPerWeek">Treatments/week</label>
-                <input id="treatmentsPerWeek" type="number" min="1" max="7" step="1" value="5" />
-              </div>
-              <div class="field">
-                <label for="technique">Technique</label>
-                <select id="technique">
-                  <option>IMRT/VMAT</option>
-                  <option>3D conformal radiation</option>
-                  <option>SBRT/SABR</option>
-                  <option>SRS</option>
-                  <option>Protons</option>
-                  <option>Brachytherapy</option>
-                </select>
-              </div>
+              <p id="setupTechniqueText">A linear accelerator rotates around the patient while daily image guidance helps align the treatment target.</p>
             </div>
-            <div class="dose-result" id="doseResult"></div>
-            <div class="tag-row" id="doseTags"></div>
+
+            <div class="setup-dots" id="setupDots" aria-label="Setup preview slides"></div>
+
+            <div class="dose-inline-card">
+              <div class="panel-heading dose-heading-inline">
+                <div>
+                  <h3>Dose explanation</h3>
+                  <p>For patient-facing discussion</p>
+                </div>
+              </div>
+              <div class="dose-grid">
+                <div class="field">
+                  <label for="totalDose">Total dose, Gy</label>
+                  <input id="totalDose" type="number" min="0" step="0.1" value="50" />
+                </div>
+                <div class="field">
+                  <label for="fractions">Fractions</label>
+                  <input id="fractions" type="number" min="1" step="1" value="25" />
+                </div>
+                <div class="field">
+                  <label for="treatmentsPerWeek">Treatments/week</label>
+                  <input id="treatmentsPerWeek" type="number" min="1" max="7" step="1" value="5" />
+                </div>
+                <div class="field">
+                  <label for="technique">Technique</label>
+                  <select id="technique">
+                    <option>IMRT/VMAT</option>
+                    <option>3D conformal radiation</option>
+                    <option>SBRT/SABR</option>
+                    <option>SRS</option>
+                    <option>Protons</option>
+                    <option>Brachytherapy</option>
+                  </select>
+                </div>
+              </div>
+              <div class="dose-result" id="doseResult"></div>
+              <div class="tag-row" id="doseTags"></div>
+            </div>
           </section>
 
-          <section class="side-card">
+          <section class="side-card symptom-card">
             <div class="panel-heading">
               <div>
                 <h3>Symptom timeline</h3>
@@ -837,22 +1031,21 @@
             </div>
             <div class="timeline" id="timeline"></div>
           </section>
+        </aside>
+      </section>
 
-          <section class="side-card">
-            <div class="panel-heading">
-              <div>
-                <h3>Clinician notes</h3>
-                <p>Optional talking points</p>
-              </div>
-            </div>
-            <div class="field">
-              <label for="clinicianNotes">Add custom note for this visit</label>
-              <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
-            </div>
-            <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
-        </aside>
-          </section>
-        </aside>
+      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
+        <div class="panel-heading">
+          <div>
+            <h3>Clinician notes</h3>
+            <p>Optional talking points</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="clinicianNotes">Add custom note for this visit</label>
+          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
+        </div>
+        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
       </section>
 
       <section class="print-only">
@@ -1085,13 +1278,16 @@
     const state = {
       systemId: systems[0].id,
       siteId: systems[0].sites[0].id,
-      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks }
+      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks },
+      forceEmbedOnMobile: true
     };
 
     const $ = (id) => document.getElementById(id);
     const activeSystem = () => systems.find(s => s.id === state.systemId) || systems[0];
     const activeSite = () => activeSystem().sites.find(site => site.id === state.siteId) || activeSystem().sites[0];
     const embedKey = (systemId, siteId) => `${systemId}:${siteId}`;
+
+    const isMobileLike = () => window.matchMedia("(max-width: 860px)").matches || (navigator.maxTouchPoints > 0 && window.matchMedia("(max-width: 1024px)").matches);
 
     function renderSystems(filter = "") {
       const query = filter.trim().toLowerCase();
@@ -1112,6 +1308,7 @@
         btn.addEventListener("click", () => {
           state.systemId = btn.dataset.systemId;
           state.siteId = activeSystem().sites[0].id;
+          state.forceEmbedOnMobile = true;
           updateAll();
         });
       });
@@ -1130,6 +1327,7 @@
       document.querySelectorAll("[data-site-id]").forEach(btn => {
         btn.addEventListener("click", () => {
           state.siteId = btn.dataset.siteId;
+          state.forceEmbedOnMobile = true;
           const site = activeSite();
           if (site.dose) {
             $("totalDose").value = site.dose[0];
@@ -1156,19 +1354,98 @@
       const url = sanitizeUrl(state.embedLinks[key]);
       const frame = $("modelFrame");
       const empty = $("emptyViewer");
+      const mobileLaunch = $("mobileViewerLaunch");
+      const mobileOpenModelLink = $("mobileOpenModelLink");
 
       $("emptyIcon").textContent = system.icon;
       $("emptyTitle").textContent = `${site.name} model not linked yet`;
       $("emptyText").textContent = "Paste a published BioDigital iframe src for this disease site to display the interactive 3D model here.";
 
+      mobileLaunch.classList.remove("show");
+      mobileLaunch.hidden = true;
+
       if (url) {
+        mobileOpenModelLink.href = url;
+        empty.style.display = "none";
+
         frame.src = url;
         frame.hidden = false;
-        empty.style.display = "none";
       } else {
         frame.hidden = true;
         frame.removeAttribute("src");
+        mobileOpenModelLink.href = "#";
         empty.style.display = "grid";
+      }
+    }
+
+    const setupSlidesByTechnique = {
+      "IMRT/VMAT": {
+        description: "A linear accelerator rotates around the patient while daily image guidance helps align the treatment target.",
+        slides: [
+          ["🛏️", "Patient position", "Placeholder for a supine treatment setup image. Replace this with your site-specific patient positioning photo."],
+          ["⚙️", "Treatment machine", "Placeholder for a linear accelerator image, such as TrueBeam or comparable linac."],
+          ["🧩", "Immobilizer", "Placeholder for thermoplastic mask, Vac-Lok cushion, breast board, wing board, or pelvic immobilization device."]
+        ]
+      },
+      "3D conformal radiation": {
+        description: "A linear accelerator delivers shaped fields from selected beam angles using patient-specific blocks, MLCs, and reproducible setup.",
+        slides: [
+          ["🛏️", "Patient position", "Placeholder for conventional supine or site-specific treatment setup."],
+          ["⚙️", "Treatment machine", "Placeholder for a linac delivering 3D conformal fields."],
+          ["🧩", "Immobilizer", "Placeholder for custom cradle, mask, breast board, or extremity setup device."]
+        ]
+      },
+      "SBRT/SABR": {
+        description: "SBRT/SABR uses highly focused radiation over a small number of treatments, with strict immobilization and motion management when needed.",
+        slides: [
+          ["🛏️", "Patient position", "Placeholder for SBRT setup, commonly supine with customized body immobilization."],
+          ["🎯", "Treatment machine", "Placeholder for linac-based SBRT, CyberKnife, or other stereotactic platform."],
+          ["🧩", "Immobilizer", "Placeholder for Vac-Lok cradle, abdominal compression, body frame, or breath-hold setup."]
+        ]
+      },
+      "SRS": {
+        description: "SRS uses stereotactic localization and very precise immobilization to treat intracranial targets in one or a few sessions.",
+        slides: [
+          ["🛏️", "Patient position", "Placeholder for cranial stereotactic setup."],
+          ["🎯", "Treatment machine", "Placeholder for Gamma Knife, linac SRS, CyberKnife, or comparable system."],
+          ["🧩", "Immobilizer", "Placeholder for frameless mask, stereotactic frame, bite block, or head fixation system."]
+        ]
+      },
+      "Protons": {
+        description: "Proton therapy uses charged particles with finite range, often requiring highly reproducible setup and anatomy-specific verification.",
+        slides: [
+          ["🛏️", "Patient position", "Placeholder for proton treatment setup."],
+          ["🌀", "Treatment machine", "Placeholder for proton gantry, fixed beam room, or nozzle image."],
+          ["🧩", "Immobilizer", "Placeholder for mask, body mold, breast board, or pediatric immobilization device."]
+        ]
+      },
+      "Brachytherapy": {
+        description: "Brachytherapy places a radiation source close to or inside the treatment region using applicators, catheters, or seeds.",
+        slides: [
+          ["🛏️", "Patient position", "Placeholder for procedure or treatment position."],
+          ["🏥", "Treatment equipment", "Placeholder for HDR afterloader, applicator setup, or procedure suite."],
+          ["🧩", "Applicator/immobilizer", "Placeholder for applicator, template, cylinder, tandem/ring, needles, or site-specific device."]
+        ]
+      }
+    };
+
+    let setupSlideIndex = 0;
+
+    function updateSetupCard() {
+      const technique = $("technique") ? $("technique").value : "IMRT/VMAT";
+      const setup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
+      const slides = setup.slides;
+      setupSlideIndex = setupSlideIndex % slides.length;
+      const [icon, title, text] = slides[setupSlideIndex];
+
+      if ($("setupTechniqueLabel")) $("setupTechniqueLabel").textContent = technique;
+      if ($("setupTechniqueText")) $("setupTechniqueText").textContent = setup.description;
+      if ($("setupSubtitle")) $("setupSubtitle").textContent = `${title} preview`;
+      if ($("setupIcon")) $("setupIcon").textContent = icon;
+      if ($("setupImageTitle")) $("setupImageTitle").textContent = title;
+      if ($("setupImageText")) $("setupImageText").textContent = text;
+      if ($("setupDots")) {
+        $("setupDots").innerHTML = slides.map((_, index) => `<span class="setup-dot ${index === setupSlideIndex ? "active" : ""}"></span>`).join("");
       }
     }
 
@@ -1287,9 +1564,22 @@
       updateDetails();
       updateViewer();
       updateDose();
+      updateSetupCard();
     }
 
-    ["totalDose", "fractions", "treatmentsPerWeek", "technique"].forEach(id => $(id).addEventListener("input", updateDose));
+    ["totalDose", "fractions", "treatmentsPerWeek", "technique"].forEach(id => $(id).addEventListener("input", () => {
+      updateDose();
+      if (id === "technique") {
+        setupSlideIndex = 0;
+        updateSetupCard();
+      }
+    }));
+    $("setupNextBtn").addEventListener("click", () => {
+      const technique = $("technique").value;
+      const setup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
+      setupSlideIndex = (setupSlideIndex + 1) % setup.slides.length;
+      updateSetupCard();
+    });
     $("searchInput").addEventListener("input", e => renderSystems(e.target.value));
     $("embedManagerBtn").addEventListener("click", openEmbedModal);
     $("emptyManageBtn").addEventListener("click", openEmbedModal);
@@ -1297,6 +1587,11 @@
     $("saveLinksBtn").addEventListener("click", saveEmbedLinks);
     $("clearLinksBtn").addEventListener("click", clearEmbedLinks);
     $("openModelBtn").addEventListener("click", openCurrentModel);
+    $("mobileTryEmbedBtn").addEventListener("click", () => {
+      state.forceEmbedOnMobile = true;
+      updateViewer();
+    });
+    window.addEventListener("resize", updateViewer);
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
 
