@@ -25,7 +25,29 @@
       --radius-sm: 14px;
       --focus: 0 0 0 4px rgba(31, 111, 120, 0.18);
     }
+#hero-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  line-height: 1.05;
+}
 
+.brand-title {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: clamp(2.8rem, 6vw, 5.25rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  color: #123c69;
+}
+
+.hero-title-text {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #334155;
+  max-width: 900px;
+}
     * { box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
@@ -633,8 +655,10 @@
     <main class="container" id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-card">
-          <h1 id="hero-title">OncoView: Show the anatomy. Explain the radiation. Reduce uncertainty.</h1>
-          <p class="lead">A clinic-friendly interface for demonstrating a cancer treatment sites. Open an embedded 3D anatomy model viewr, and walk through radiation treatment logistics, expected side effects, and practical supportive care.</p>
+<h1 id="hero-title">
+  <span class="brand-title">OncoView</span>
+  <span class="hero-title-text">Show the anatomy. Explain the radiation. Reduce uncertainty.</span>
+</h1>          <p class="lead">A clinic-friendly interface for demonstrating a cancer treatment sites. Open an embedded 3D anatomy model viewr, and walk through radiation treatment logistics, expected side effects, and practical supportive care.</p>
           <div class="hero-metrics" aria-label="App capabilities">
                  </div>
         </div>
