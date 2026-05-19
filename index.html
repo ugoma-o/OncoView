@@ -275,19 +275,15 @@
 
     .workspace {
       display: grid;
-      grid-template-columns: 300px minmax(0, 1fr);
-      grid-template-areas:
-        "systems viewer"
-        "systems treatment";
+      grid-template-columns: 240px minmax(0, 1fr) 300px;
       gap: 18px;
       align-items: start;
     }
 
-    .workspace > .panel { grid-area: systems; }
-    .workspace > .viewer-card { grid-area: viewer; min-width: 0; }
-    .workspace > .side-column { grid-area: treatment; min-width: 0; }
+    .workspace > .viewer-card { min-width: 0; }
+    .workspace > .panel, .workspace > .side-column { min-width: 0; }
 
-    .panel { padding: 18px; }
+    .panel { padding: 16px; }
 
     .panel-heading {
       display: flex;
@@ -453,7 +449,6 @@
 
     .side-column {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -613,25 +608,14 @@
 
     .print-only { display: none; }
 
-    @media (max-width: 1180px) {
-      .workspace {
-        grid-template-columns: 280px minmax(0, 1fr);
-        grid-template-areas:
-          "systems viewer"
-          "systems treatment";
-      }
-      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 1080px) {
+      .workspace { grid-template-columns: 220px minmax(0, 1fr); }
+      .side-column { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
-      .workspace {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "systems"
-          "viewer"
-          "treatment";
-      }
+      .workspace { grid-template-columns: 1fr; }
       .side-column { grid-template-columns: 1fr; }
       .detail-grid { grid-template-columns: 1fr; }
       .hero-metrics { grid-template-columns: 1fr; }
@@ -1252,8 +1236,7 @@
       document.body.classList.toggle("patient-mode", state.patientMode);
       $("patientModeBtn").textContent = state.patientMode ? "Clinician view" : "Patient view";
       document.querySelector(".panel").style.display = state.patientMode ? "none" : "block";
-      document.querySelector(".workspace").style.gridTemplateColumns = state.patientMode ? "minmax(0, 1fr)" : "";
-      document.querySelector(".workspace").style.gridTemplateAreas = state.patientMode ? '"viewer" "treatment"' : "";
+      document.querySelector(".workspace").style.gridTemplateColumns = state.patientMode ? "minmax(0, 1fr) 300px" : "";
     }
 
     function updateAll() {
