@@ -279,7 +279,7 @@
 
     .workspace {
       display: grid;
-      grid-template-columns: minmax(500px, 760px) minmax(480px, 1fr);
+      grid-template-columns: minmax(540px, 840px) minmax(440px, 1fr);
       gap: 22px;
       align-items: start;
     }
@@ -287,14 +287,14 @@
     .workspace > .viewer-card {
       min-width: 0;
       width: 100%;
-      max-width: 760px;
+      max-width: 840px;
       justify-self: end;
     }
 
     .workspace > .side-column {
       min-width: 0;
       width: 100%;
-      max-width: 720px;
+      max-width: 660px;
       justify-self: start;
     }
 
@@ -646,14 +646,14 @@
     .print-only { display: none; }
 
     @media (max-width: 1320px) {
-      .workspace { grid-template-columns: minmax(480px, 720px) minmax(440px, 1fr); }
-      .workspace > .viewer-card { max-width: 720px; }
-      .workspace > .side-column { max-width: 680px; }
+      .workspace { grid-template-columns: minmax(520px, 800px) minmax(400px, 1fr); }
+      .workspace > .viewer-card { max-width: 660px; }
+      .workspace > .side-column { max-width: 620px; }
     }
 
     @media (max-width: 1180px) {
-      .workspace { grid-template-columns: minmax(460px, 680px) minmax(400px, 1fr); }
-      .workspace > .viewer-card { max-width: 680px; }
+      .workspace { grid-template-columns: minmax(500px, 760px) minmax(380px, 1fr); }
+      .workspace > .viewer-card { max-width: 620px; }
       .workspace > .side-column { max-width: 640px; }
     }
 
