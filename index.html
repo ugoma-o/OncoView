@@ -361,11 +361,12 @@
 
     .viewer-frame-wrap {
       position: relative;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 16 / 12;
       background:
         linear-gradient(135deg, rgba(31, 111, 120, 0.12), rgba(139, 92, 246, 0.10)),
         #eff5f6;
-      min-height: 420px;
+      min-height: 620px;
+      height: clamp(620px, 72vh, 920px);
     }
 
     iframe.model-frame {
@@ -616,7 +617,7 @@
       .detail-grid { grid-template-columns: 1fr; }
       .hero-metrics { grid-template-columns: 1fr; }
       .brand-subtitle { display: none; }
-      .viewer-frame-wrap { min-height: 330px; }
+      .viewer-frame-wrap { min-height: 520px; height: 68vh; }
       .topbar-inner { align-items: flex-start; }
       .nav-actions .btn span.optional { display: none; }
     }
@@ -1022,10 +1023,16 @@
     srOnlyStyle.innerHTML = `.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}`;
     document.head.appendChild(srOnlyStyle);
 
+    const defaultEmbedLinks = {
+      "gu:prostate": "https://human.biodigital.com/studio/edit?id=7FfI"
+    };
+
+    const savedEmbedLinks = JSON.parse(localStorage.getItem("oncoviewEmbedLinks") || "{}");
+
     const state = {
       systemId: systems[0].id,
       siteId: systems[0].sites[0].id,
-      embedLinks: JSON.parse(localStorage.getItem("oncoviewEmbedLinks") || "{}"),
+      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks },
       patientMode: false
     };
 
@@ -1208,7 +1215,7 @@
 
     function clearEmbedLinks() {
       if (!confirm("Clear all saved BioDigital links from this browser?")) return;
-      state.embedLinks = {};
+      state.embedLinks = { ...defaultEmbedLinks };
       localStorage.removeItem("oncoviewEmbedLinks");
       renderEmbedEditors();
       updateAll();
