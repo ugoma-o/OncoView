@@ -405,48 +405,6 @@
       background: #f1f5f7;
     }
 
-
-    .mobile-viewer-launch {
-      position: absolute;
-      inset: 0;
-      display: none;
-      place-items: center;
-      padding: 22px;
-      text-align: center;
-      background:
-        linear-gradient(135deg, rgba(31, 111, 120, 0.14), rgba(139, 92, 246, 0.10)),
-        #eff5f6;
-    }
-
-    .mobile-viewer-launch.show { display: grid; }
-
-    .mobile-viewer-card {
-      width: min(560px, 100%);
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(219, 228, 234, 0.96);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 18px 38px rgba(24, 33, 47, 0.10);
-    }
-
-    .mobile-viewer-card h3 {
-      margin-bottom: 8px;
-      font-size: 1.35rem;
-      letter-spacing: -0.035em;
-    }
-
-    .mobile-viewer-card p {
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .mobile-viewer-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
     /* BioDigital switches its internal information panel from a side column to a
        closed drawer when the viewer is under 960px wide. The model card is capped
        below that breakpoint so the card stays visually flush with the embed. */
@@ -802,16 +760,7 @@
                 <button class="btn primary" id="emptyManageBtn" type="button">Add BioDigital model URL</button>
               </div>
             </div>
-            <iframe class="model-frame" id="modelFrame" title="Embedded 3D anatomy model" allow="fullscreen; xr-spatial-tracking; clipboard-read; clipboard-write" allowfullscreen hidden></iframe>
-            <div class="mobile-viewer-launch" id="mobileViewerLaunch" hidden>
-              <div class="mobile-viewer-card">
-                <h3>Open BioDigital full screen on mobile</h3>
-                <div class="mobile-viewer-actions">
-                  <a class="btn primary" id="mobileOpenModelLink" href="#" target="_blank" rel="noopener noreferrer">Open full-screen model</a>
-                  <button class="btn" id="mobileTryEmbedBtn" type="button">Try embedded viewer</button>
-                </div>
-              </div>
-            </div>
+            <iframe class="model-frame" id="modelFrame" title="Embedded 3D anatomy model" allowfullscreen hidden></iframe>
           </div>
           <div class="content-section">
             <div class="panel-heading">
@@ -1136,16 +1085,13 @@
     const state = {
       systemId: systems[0].id,
       siteId: systems[0].sites[0].id,
-      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks },
-      forceEmbedOnMobile: false
+      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks }
     };
 
     const $ = (id) => document.getElementById(id);
     const activeSystem = () => systems.find(s => s.id === state.systemId) || systems[0];
     const activeSite = () => activeSystem().sites.find(site => site.id === state.siteId) || activeSystem().sites[0];
     const embedKey = (systemId, siteId) => `${systemId}:${siteId}`;
-
-    const isMobileLike = () => window.matchMedia("(max-width: 860px)").matches || (navigator.maxTouchPoints > 0 && window.matchMedia("(max-width: 1024px)").matches);
 
     function renderSystems(filter = "") {
       const query = filter.trim().toLowerCase();
@@ -1166,7 +1112,6 @@
         btn.addEventListener("click", () => {
           state.systemId = btn.dataset.systemId;
           state.siteId = activeSystem().sites[0].id;
-          state.forceEmbedOnMobile = false;
           updateAll();
         });
       });
@@ -1185,7 +1130,6 @@
       document.querySelectorAll("[data-site-id]").forEach(btn => {
         btn.addEventListener("click", () => {
           state.siteId = btn.dataset.siteId;
-          state.forceEmbedOnMobile = false;
           const site = activeSite();
           if (site.dose) {
             $("totalDose").value = site.dose[0];
@@ -1212,34 +1156,18 @@
       const url = sanitizeUrl(state.embedLinks[key]);
       const frame = $("modelFrame");
       const empty = $("emptyViewer");
-      const mobileLaunch = $("mobileViewerLaunch");
-      const mobileOpenModelLink = $("mobileOpenModelLink");
 
       $("emptyIcon").textContent = system.icon;
       $("emptyTitle").textContent = `${site.name} model not linked yet`;
       $("emptyText").textContent = "Paste a published BioDigital iframe src for this disease site to display the interactive 3D model here.";
 
-      mobileLaunch.classList.remove("show");
-      mobileLaunch.hidden = true;
-
       if (url) {
-        mobileOpenModelLink.href = url;
-        empty.style.display = "none";
-
-        if (isMobileLike() && !state.forceEmbedOnMobile) {
-          frame.hidden = true;
-          frame.removeAttribute("src");
-          mobileLaunch.hidden = false;
-          mobileLaunch.classList.add("show");
-          return;
-        }
-
         frame.src = url;
         frame.hidden = false;
+        empty.style.display = "none";
       } else {
         frame.hidden = true;
         frame.removeAttribute("src");
-        mobileOpenModelLink.href = "#";
         empty.style.display = "grid";
       }
     }
@@ -1369,11 +1297,6 @@
     $("saveLinksBtn").addEventListener("click", saveEmbedLinks);
     $("clearLinksBtn").addEventListener("click", clearEmbedLinks);
     $("openModelBtn").addEventListener("click", openCurrentModel);
-    $("mobileTryEmbedBtn").addEventListener("click", () => {
-      state.forceEmbedOnMobile = true;
-      updateViewer();
-    });
-    window.addEventListener("resize", updateViewer);
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
 
