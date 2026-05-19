@@ -279,20 +279,23 @@
 
     .workspace {
       display: grid;
-      grid-template-columns: minmax(560px, 940px) minmax(420px, 1fr);
-      gap: 18px;
+      grid-template-columns: minmax(500px, 760px) minmax(480px, 1fr);
+      gap: 22px;
       align-items: start;
     }
 
     .workspace > .viewer-card {
       min-width: 0;
       width: 100%;
-      max-width: 940px;
+      max-width: 760px;
+      justify-self: end;
     }
 
     .workspace > .side-column {
       min-width: 0;
       width: 100%;
+      max-width: 720px;
+      justify-self: start;
     }
 
     .panel { padding: 16px; }
@@ -403,8 +406,8 @@
     }
 
     /* BioDigital switches its internal information panel from a side column to a
-       closed drawer when the viewer is under 960px wide. Keeping the model card
-       capped at 940px makes that behavior automatic inside the iframe. */
+       closed drawer when the viewer is under 960px wide. The model card is capped
+       below that breakpoint so the card stays visually flush with the embed. */
 
     .empty-viewer {
       position: absolute;
@@ -508,7 +511,11 @@
     }
 
     .dose-result strong { font-size: 1.9rem; letter-spacing: -0.05em; display: block; }
-    .dose-result span { color: var(--muted); display: block; max-width: 58ch; }
+    .dose-result span { color: var(--muted); display: block; max-width: 72ch; }
+
+    .side-column .dose-result {
+      width: 100%;
+    }
 
     .timeline {
       display: grid;
@@ -639,18 +646,21 @@
     .print-only { display: none; }
 
     @media (max-width: 1320px) {
-      .workspace { grid-template-columns: minmax(520px, 840px) minmax(360px, 1fr); }
-      .workspace > .viewer-card { max-width: 840px; }
+      .workspace { grid-template-columns: minmax(480px, 720px) minmax(440px, 1fr); }
+      .workspace > .viewer-card { max-width: 720px; }
+      .workspace > .side-column { max-width: 680px; }
     }
 
     @media (max-width: 1180px) {
-      .workspace { grid-template-columns: minmax(520px, 760px) minmax(360px, 1fr); }
-      .workspace > .viewer-card { max-width: 760px; }
+      .workspace { grid-template-columns: minmax(460px, 680px) minmax(400px, 1fr); }
+      .workspace > .viewer-card { max-width: 680px; }
+      .workspace > .side-column { max-width: 640px; }
     }
 
     @media (max-width: 980px) {
       .workspace { grid-template-columns: 1fr; }
-      .workspace > .viewer-card { max-width: none; }
+      .workspace > .viewer-card,
+      .workspace > .side-column { max-width: none; justify-self: stretch; }
       .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
