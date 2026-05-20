@@ -729,21 +729,43 @@
 
     .timeline-item {
       display: grid;
-      grid-template-columns: 78px 1fr;
+      grid-template-columns: 92px 1fr;
       gap: 12px;
       border: 1px solid var(--line);
       border-radius: 17px;
       padding: 12px;
-      background: #fff;
+      background: var(--surface);
     }
 
     .timeline-time {
       color: var(--primary-dark);
       font-weight: 850;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
+      line-height: 1.25;
     }
 
-    .timeline-item p { color: var(--muted); margin: 2px 0 0; font-size: 0.9rem; }
+    .timeline-item strong {
+      display: block;
+      margin-bottom: 2px;
+      letter-spacing: -0.015em;
+    }
+
+    .timeline-item p { color: var(--muted); margin: 3px 0 0; font-size: 0.9rem; }
+
+    .timeline-item ul {
+      margin: 7px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .timeline-item li { margin: 3px 0; }
+
+    .timeline-context {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 2px;
+    }
 
     .tag-row {
       display: flex;
@@ -1704,6 +1726,102 @@
       }
     };
 
+    const timelineOverrides = {
+      "gu:prostate:IMRT/VMAT": [
+        {
+          phase: "Acute",
+          time: "Weeks 1 to 4",
+          title: "Early treatment inflammation",
+          summary: "During the first month of daily prostate radiation, dose begins accumulating in the pelvis. Temporary inflammation can start in the bladder, urethra, rectum, and surrounding bowel lining.",
+          examples: [
+            "Mild urinary frequency or needing to urinate more often",
+            "Weaker or slower urinary stream",
+            "Mild bowel changes, such as looser stools, gas, or mild rectal sensitivity",
+            "Fatigue often begins around week 2 or 3"
+          ]
+        },
+        {
+          phase: "Subacute",
+          time: "Week 5 to 4 weeks after RT",
+          title: "Peak inflammatory phase",
+          summary: "The final treatment weeks and first month after treatment are often when urinary, bowel, and fatigue symptoms peak because the cumulative dose produces the most urethral and rectal irritation.",
+          examples: [
+            "Radiation cystitis pattern: urgency, burning with urination, nocturia, and frequent voiding",
+            "Radiation proctitis pattern: bowel urgency, frequent bowel movements, rectal pressure, or minor discomfort",
+            "Peak fatigue, with routine tasks feeling heavier",
+            "Possible redness, darkening, or tenderness of the perineal skin when that region receives dose"
+          ]
+        },
+        {
+          phase: "Convalescent",
+          time: "Months 2 to 6 after RT",
+          title: "Recovery and tissue healing",
+          summary: "Healthy pelvic tissues regenerate, inflammation decreases, and most temporary urinary, bowel, and energy-related side effects gradually improve.",
+          examples: [
+            "Bladder and bowel habits gradually move back toward baseline",
+            "Burning with urination resolves and urinary stream strength improves",
+            "Energy commonly rebounds over the first 4 to 8 weeks after the final treatment, though recovery varies"
+          ]
+        },
+        {
+          phase: "Late",
+          time: "6 months to years",
+          title: "Long-term surveillance effects",
+          summary: "Late effects are uncommon with modern conformal prostate IMRT, but can occur months to years later from fibrosis or microscopic vascular and nerve changes.",
+          examples: [
+            "Erectile dysfunction can develop gradually over 1 to 3 years because vascular and nerve effects tend to evolve slowly",
+            "Urethral stricture can cause a progressively weaker stream or difficulty urinating months later",
+            "Chronic proctitis or cystitis is uncommon but can cause intermittent minor rectal bleeding or small traces of blood in the urine"
+          ]
+        }
+      ]
+    };
+
+    function getActiveTimeline() {
+      const system = activeSystem();
+      const site = activeSite();
+      const technique = $("technique") ? $("technique").value : "";
+      const siteTechniqueKey = `${system.id}:${site.id}:${technique}`;
+      const siteOnlyKey = `${system.id}:${site.id}`;
+      return timelineOverrides[siteTechniqueKey] || timelineOverrides[siteOnlyKey] || system.timeline;
+    }
+
+    function renderTimelineEntry(entry, siteName) {
+      if (Array.isArray(entry)) {
+        const [time, text] = entry;
+        return `
+          <div class="timeline-item">
+            <div class="timeline-time">${time}</div>
+            <div><strong>${siteName}</strong><p>${text}</p></div>
+          </div>
+        `;
+      }
+
+      const examples = Array.isArray(entry.examples) && entry.examples.length
+        ? `<ul>${entry.examples.map(item => `<li>${item}</li>`).join("")}</ul>`
+        : "";
+
+      return `
+        <div class="timeline-item">
+          <div>
+            <div class="timeline-time">${entry.phase || "Phase"}</div>
+            <div class="timeline-context">${entry.time || ""}</div>
+          </div>
+          <div>
+            <strong>${entry.title || siteName}</strong>
+            <p>${entry.summary || ""}</p>
+            ${examples}
+          </div>
+        </div>
+      `;
+    }
+
+    function updateTimeline() {
+      const site = activeSite();
+      const timeline = getActiveTimeline();
+      $("timeline").innerHTML = timeline.map(entry => renderTimelineEntry(entry, site.name)).join("");
+    }
+
     let setupSlideIndex = 0;
 
     function updateSetupCard() {
@@ -1734,12 +1852,7 @@
       $("expectationText").textContent = system.expectation;
       $("positioningText").textContent = system.position;
       $("supportiveCare").innerHTML = system.support.map(item => `<li>${item}</li>`).join("");
-      $("timeline").innerHTML = system.timeline.map(([time, text]) => `
-        <div class="timeline-item">
-          <div class="timeline-time">${time}</div>
-          <div><strong>${site.name}</strong><p>${text}</p></div>
-        </div>
-      `).join("");
+      updateTimeline();
       $("printSummary").textContent = `${system.name}: ${site.name}. ${system.purpose} Expected course: ${system.expectation}`;
     }
 
@@ -1850,6 +1963,7 @@
       if (id === "technique") {
         setupSlideIndex = 0;
         updateSetupCard();
+        updateTimeline();
       }
     }));
     $("setupNextBtn").addEventListener("click", () => {
