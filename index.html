@@ -365,29 +365,39 @@
       display: grid;
       place-items: center;
       background: #f1f5f7;
-      font-size: 1.3rem;
+      overflow: hidden;
+      padding: 0;
+      flex: 0 0 40px;
     }
 
     .system-card.active .icon-bubble { background: #fff; }
 
-
     .system-icon-img {
-      width: 34px;
-      height: 34px;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
+      transform: scale(1.16);
+      transform-origin: center;
     }
 
     .empty-system-icon {
-      width: 74px;
-      height: 74px;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
+      transform: scale(1.08);
+      transform-origin: center;
     }
 
     .empty-viewer-inner .big-icon {
       width: 86px;
       height: 86px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #f1f5f7;
       margin: 0 auto 10px;
       display: grid;
       place-items: center;
@@ -883,7 +893,7 @@
         <div class="brand" aria-label="OncoViewer">
           <div class="brand-mark">OV</div>
           <div>
-            <div class="lead">OncoViewer</div>
+            <div class="brand-title">OncoViewer</div>
             <div class="brand-subtitle">Radiation oncology education workspace</div>
           </div>
         </div>
