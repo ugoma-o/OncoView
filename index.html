@@ -369,6 +369,38 @@
     }
 
     .system-card.active .icon-bubble { background: #fff; }
+
+
+    .system-icon-img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .empty-system-icon {
+      width: 74px;
+      height: 74px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .empty-viewer-inner .big-icon {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 10px;
+      display: grid;
+      place-items: center;
+      font-size: unset;
+    }
+
+    .embed-editor-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
     .system-card strong { display: block; font-size: 0.96rem; }
     .system-card span { display: block; color: var(--muted); font-size: 0.8rem; }
 
@@ -478,7 +510,7 @@
       box-shadow: 0 18px 38px rgba(24, 33, 47, 0.08);
     }
 
-    .empty-viewer-inner .big-icon { font-size: 3rem; margin-bottom: 10px; }
+    .empty-viewer-inner .big-icon { width: 86px; height: 86px; margin: 0 auto 10px; display: grid; place-items: center; }
     .empty-viewer-inner h3 { margin-bottom: 8px; font-size: 1.45rem; letter-spacing: -0.04em; }
     .empty-viewer-inner p { color: var(--muted); margin-bottom: 16px; }
 
@@ -893,7 +925,7 @@
           </div>
           <div class="search-box">
             <label class="sr-only" for="searchInput">Search cancer sites</label>
-            <input id="searchInput" type="search" placeholder="Search Neurologic, prostate, lung..." autocomplete="off" />
+            <input id="searchInput" type="search" placeholder="Search CNS, prostate, lung..." autocomplete="off" />
           </div>
           <div class="system-grid" id="systemGrid"></div>
         </section>
@@ -910,7 +942,7 @@
           <div class="viewer-frame-wrap" id="viewerWrap">
             <div class="empty-viewer" id="emptyViewer">
               <div class="empty-viewer-inner">
-                <div class="big-icon" id="emptyIcon">🧠</div>
+                <div class="big-icon" id="emptyIcon"><img src="icons/neurologic.png" alt="" class="empty-system-icon" /></div>
                 <h3 id="emptyTitle">Choose a cancer site</h3>
                 <p id="emptyText">After you add a published BioDigital iframe URL, the 3D model will load here. Until then, this panel acts as a clear placeholder for your clinical demonstration.</p>
                 <button class="btn primary" id="emptyManageBtn" type="button">Add BioDigital model URL</button>
@@ -1084,7 +1116,7 @@
   <script>
     const systems = [
       {
-        id: "Neurologic", icon: "🧠", name: "Neurologic", subtitle: "Brain, spine, skull base", defaultDose: [60, 30],
+        id: "cns", icon: "icons/neurologic.png", name: "Neurologic", subtitle: "Brain, spine, skull base", defaultDose: [60, 30],
         purpose: "Radiation may be used after surgery, as definitive treatment, or for palliation to treat visible tumor and microscopic disease while respecting dose limits to the brainstem, optic apparatus, cochlea, spinal cord, and other critical structures.",
         expectation: "Patients often need a custom thermoplastic mask or immobilization setup. Treatment is usually painless and brief, but planning is highly individualized because millimeters matter around eloquent structures.",
         support: ["Steroids only when clinically indicated for edema", "Antiemetics if nausea develops", "Fatigue counseling and sleep/activity pacing", "Skin and scalp care when hair-bearing scalp receives dose"],
@@ -1102,7 +1134,7 @@
         ]
       },
       {
-        id: "thoracic", icon: "🫁", name: "Thoracic", subtitle: "Lung, esophagus, mediastinum", defaultDose: [60, 30],
+        id: "thoracic", icon: "icons/thoracic.png", name: "Thoracic", subtitle: "Lung, esophagus, mediastinum", defaultDose: [60, 30],
         purpose: "Thoracic radiation targets tumors in the lung, esophagus, mediastinum, or chest wall while limiting exposure to lung, heart, esophagus, spinal cord, and brachial plexus.",
         expectation: "Simulation may include 4D-CT to account for breathing motion. Some patients are treated with breath guidance, compression, or motion management depending on tumor location.",
         support: ["Nutrition support for esophagitis risk", "Cough and dyspnea monitoring", "Skin care across entry and exit regions", "Smoking cessation support when relevant"],
@@ -1110,7 +1142,7 @@
         sites: [
           { id: "nsclc", name: "Non-small cell lung cancer", hint: "Central or peripheral lung", tags: ["lung", "IMRT", "SBRT"], dose: [60, 30] },
           { id: "sclc", name: "Small cell lung cancer", hint: "Thorax and PCI discussion", tags: ["chemoRT", "thorax"], dose: [45, 30] },
-          { id: "esophagus", name: "Esophageal cancer", hint: "Swallowing symptoms", tags: ["Gastrointestinal", "thorax", "chemoRT"], dose: [50.4, 28] },
+          { id: "esophagus", name: "Esophageal cancer", hint: "Swallowing symptoms", tags: ["GI", "thorax", "chemoRT"], dose: [50.4, 28] },
           { id: "mediastinum", name: "Mediastinal lymphoma", hint: "Heart and breast sparing", tags: ["lymphoma", "ISRT"], dose: [30, 15] }
         ],
         timeline: [
@@ -1120,7 +1152,7 @@
         ]
       },
       {
-        id: "breast", icon: "🎗️", name: "Breast", subtitle: "Breast, chest wall, nodes", defaultDose: [40.05, 15],
+        id: "breast", icon: "icons/breast.png", name: "Breast", subtitle: "Breast, chest wall, nodes", defaultDose: [40.05, 15],
         purpose: "Breast radiation lowers local recurrence risk after breast-conserving surgery and may treat the chest wall or regional nodes after mastectomy when indicated.",
         expectation: "The treated area is mapped during simulation. Left-sided treatment may use deep inspiration breath hold to reduce heart dose.",
         support: ["Gentle skin care and moisturizer per clinic protocol", "Supportive bra or soft clothing", "Fatigue pacing", "Shoulder range-of-motion encouragement when appropriate"],
@@ -1138,8 +1170,8 @@
         ]
       },
       {
-        id: "Gastrointestinal", icon: "🧬", name: "Gastrointestinal", subtitle: "Pancreas, rectum, liver, anal", defaultDose: [50.4, 28],
-        purpose: "Gastrointestinalradiation may be used before surgery, after surgery, definitively with chemotherapy, or for palliation, with careful attention to bowel, stomach, liver, kidneys, bladder, and spinal cord.",
+        id: "gi", icon: "icons/gastrointestinal.png", name: "Gastrointestinal", subtitle: "Pancreas, rectum, liver, anal", defaultDose: [50.4, 28],
+        purpose: "GI radiation may be used before surgery, after surgery, definitively with chemotherapy, or for palliation, with careful attention to bowel, stomach, liver, kidneys, bladder, and spinal cord.",
         expectation: "Simulation instructions may include fasting, bladder filling, bowel preparation, contrast, or motion management depending on the target.",
         support: ["Antidiarrheals or bowel regimen depending on symptoms", "Nutrition and hydration planning", "Nausea management", "Perianal skin care for pelvic/anal fields"],
         position: "Often supine. Some pelvic treatments use customized immobilization and bladder/rectal preparation to improve reproducibility.",
@@ -1156,8 +1188,8 @@
         ]
       },
       {
-        id: "Genitourinary", icon: "🧫", name: "Genitourinary", subtitle: "Prostate, bladder, kidney, testis", defaultDose: [70, 28],
-        purpose: "Genitourinaryradiation treats prostate, bladder, penile, testicular, kidney, adrenal, or metastatic targets while reducing dose to bowel, bladder, rectum, urethra, kidneys, and sexual organs when feasible.",
+        id: "gu", icon: "icons/genitourinary.png", name: "Genitourinary", subtitle: "Prostate, bladder, kidney, testis", defaultDose: [70, 28],
+        purpose: "GU radiation treats prostate, bladder, penile, testicular, kidney, adrenal, or metastatic targets while reducing dose to bowel, bladder, rectum, urethra, kidneys, and sexual organs when feasible.",
         expectation: "Pelvic treatment often depends on reproducible bladder and rectal filling. Prostate treatment may use fiducials, MRI fusion, or rectal spacer in selected cases.",
         support: ["Bladder filling and bowel routine coaching", "Alpha blocker discussion for urinary symptoms", "Hydration guidance", "Sexual health and fertility counseling when relevant"],
         position: "Usually supine. Prostate or pelvic cases may use leg immobilization and daily image guidance.",
@@ -1174,7 +1206,7 @@
         ]
       },
       {
-        id: "gyn", icon: "♀️", name: "Gynecologic", subtitle: "Cervix, uterus, vagina, vulva", defaultDose: [45, 25],
+        id: "gyn", icon: "icons/gynecologic.png", name: "Gynecologic", subtitle: "Cervix, uterus, vagina, vulva", defaultDose: [45, 25],
         purpose: "Gynecologic radiation may combine external beam radiation with brachytherapy to treat cervical, endometrial, vaginal, or vulvar cancers while accounting for bladder, bowel, rectum, vagina, ovaries, and pelvic bone marrow.",
         expectation: "Treatment may involve pelvic external beam radiation and, for selected cancers, internal radiation called brachytherapy. Simulation often includes bladder and bowel instructions.",
         support: ["Diarrhea and urinary symptom management", "Skin care for vulvar/groin fields", "Vaginal health and dilator counseling when appropriate", "Fertility and ovarian function counseling when relevant"],
@@ -1192,7 +1224,7 @@
         ]
       },
       {
-        id: "hn", icon: "🗣️", name: "Head & neck", subtitle: "Oral cavity, pharynx, larynx, salivary", defaultDose: [70, 35],
+        id: "hn", icon: "icons/headneck.png", name: "Head & neck", subtitle: "Oral cavity, pharynx, larynx, salivary", defaultDose: [70, 35],
         purpose: "Head and neck radiation treats mucosal, salivary, thyroid, skin, or nodal disease while carefully limiting dose to swallowing structures, salivary glands, mandible, spinal cord, brainstem, optic structures, and cochlea.",
         expectation: "Patients usually require a custom mask. Dental evaluation, nutrition planning, speech/swallow support, and concurrent systemic therapy may be part of care.",
         support: ["Oral rinses and mucositis management", "Nutrition and hydration support", "Pain control escalation plan", "Dental, speech, and swallow therapy coordination"],
@@ -1210,7 +1242,7 @@
         ]
       },
       {
-        id: "heme", icon: "🩸", name: "Heme/Lymphatic", subtitle: "Lymphoma, myeloma, marrow", defaultDose: [30, 15],
+        id: "heme", icon: "icons/heme.png", name: "Heme/Lymphatic", subtitle: "Lymphoma, myeloma, marrow", defaultDose: [30, 15],
         purpose: "Radiation for hematologic malignancies often uses involved-site or focal approaches to treat lymphoma, plasmacytoma, myeloma lesions, or symptomatic disease with attention to nearby normal tissue and marrow reserve.",
         expectation: "Fields may be smaller than historical lymphoma radiation fields. The plan is often coordinated with systemic therapy timing and response imaging.",
         support: ["Fatigue counseling", "Site-specific skin or mucosal care", "Blood count monitoring when marrow exposure is relevant", "Pain flare counseling for bony lesions"],
@@ -1228,7 +1260,7 @@
         ]
       },
       {
-        id: "skin-sarcoma", icon: "🦴", name: "Skin & sarcoma", subtitle: "Melanoma, NMSC, soft tissue, bone", defaultDose: [50, 25],
+        id: "skin-sarcoma", icon: "icons/skin.png", name: "Skin & sarcoma", subtitle: "Melanoma, NMSC, soft tissue, bone", defaultDose: [50, 25],
         purpose: "Radiation can treat skin cancers, sarcomas, bone tumors, or postoperative beds while balancing tumor control with wound healing, limb function, skin, bone, nerve, and joint toxicity.",
         expectation: "Setup depends on location. Some superficial cancers use electrons, orthovoltage, brachytherapy, or custom bolus. Sarcomas require careful target definition around surgical beds and compartments.",
         support: ["Skin care and dressing coordination", "Wound monitoring", "Physical therapy or range-of-motion preservation", "Pain and edema management"],
@@ -1246,14 +1278,14 @@
         ]
       },
       {
-        id: "peds", icon: "🧒", name: "Pediatric", subtitle: "Pediatric solid tumors", defaultDose: [54, 30],
+        id: "peds", icon: "icons/peds.png", name: "Pediatric", subtitle: "Pediatric solid tumors", defaultDose: [54, 30],
         purpose: "Pediatric radiation requires disease-specific treatment with heightened attention to growth, cognition, endocrine function, fertility, organs at risk, anesthesia needs, and survivorship.",
         expectation: "Care is family-centered and often coordinated with child life, anesthesia, systemic therapy teams, rehabilitation, fertility preservation, and school support.",
         support: ["Child life preparation", "Nutrition and hydration support", "Developmentally appropriate symptom tracking", "Survivorship and late-effects counseling"],
         position: "Positioning depends on age, site, and ability to cooperate. Anesthesia or sedation may be needed for reproducible daily treatment.",
         sites: [
           { id: "medulloblastoma", name: "Medulloblastoma", hint: "CSI and boost", tags: ["CSI", "protons"], dose: [54, 30] },
-          { id: "ependymoma", name: "Ependymoma", hint: "Focal Neurologic RT", tags: ["Neurologic", "conformal"], dose: [59.4, 33] },
+          { id: "ependymoma", name: "Ependymoma", hint: "Focal CNS RT", tags: ["CNS", "conformal"], dose: [59.4, 33] },
           { id: "rhabdomyosarcoma", name: "Rhabdomyosarcoma", hint: "Site-specific", tags: ["peds", "chemoRT"], dose: [50.4, 28] },
           { id: "wilms", name: "Wilms tumor", hint: "Flank/whole abdomen/lung", tags: ["kidney", "peds"], dose: [10.8, 6] }
         ],
@@ -1298,7 +1330,7 @@
 
       $("systemGrid").innerHTML = filtered.map(system => `
         <button class="system-card ${system.id === state.systemId ? "active" : ""}" type="button" data-system-id="${system.id}">
-          <span class="icon-bubble" aria-hidden="true">${system.icon}</span>
+          <span class="icon-bubble" aria-hidden="true"><img src="${system.icon}" alt="" class="system-icon-img" /></span>
           <span><strong>${system.name}</strong><span>${system.subtitle}</span></span>
           <span aria-hidden="true">›</span>
         </button>
@@ -1357,7 +1389,7 @@
       const mobileLaunch = $("mobileViewerLaunch");
       const mobileOpenModelLink = $("mobileOpenModelLink");
 
-      $("emptyIcon").textContent = system.icon;
+      $("emptyIcon").innerHTML = `<img src="${system.icon}" alt="" class="empty-system-icon" />`;
       $("emptyTitle").textContent = `${site.name} model not linked yet`;
       $("emptyText").textContent = "Paste a published BioDigital iframe src for this disease site to display the interactive 3D model here.";
 
@@ -1500,7 +1532,7 @@
     function renderEmbedEditors() {
       $("embedList").innerHTML = systems.map(system => `
         <div class="embed-editor">
-          <strong>${system.icon} ${system.name}</strong>
+          <strong><img src="${system.icon}" alt="" class="embed-editor-icon" /> ${system.name}</strong>
           ${system.sites.map(site => {
             const key = embedKey(system.id, site.id);
             const value = state.embedLinks[key] || "";
