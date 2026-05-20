@@ -566,6 +566,39 @@
       max-width: 44ch;
     }
 
+
+    .setup-media.has-image {
+      padding: 0;
+      overflow: hidden;
+      border-style: solid;
+      background: #f8fbfc;
+      text-align: left;
+      display: block;
+    }
+
+    .setup-image {
+      width: 100%;
+      height: 310px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background: #f1f5f7;
+    }
+
+    .setup-image-caption {
+      padding: 14px 16px 16px;
+      background: rgba(255, 255, 255, 0.94);
+      border-top: 1px solid var(--line);
+    }
+
+    .setup-media.has-image .setup-placeholder-icon {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      .setup-image { height: 260px; }
+    }
+
     .setup-placeholder-icon {
       width: 76px;
       height: 76px;
@@ -968,8 +1001,9 @@
             </div>
 
             <div class="setup-media" id="setupMedia" role="img" aria-label="Treatment setup image placeholder">
+              <img class="setup-image" id="setupImage" alt="" hidden />
               <div class="setup-placeholder-icon" id="setupIcon">🛏️</div>
-              <div>
+              <div class="setup-image-caption" id="setupImageCaption">
                 <strong id="setupImageTitle">Patient position</strong>
                 <p id="setupImageText">Placeholder for patient positioning image.</p>
               </div>
@@ -1308,6 +1342,7 @@
         btn.addEventListener("click", () => {
           state.systemId = btn.dataset.systemId;
           state.siteId = activeSystem().sites[0].id;
+          setupSlideIndex = 0;
           state.forceEmbedOnMobile = true;
           updateAll();
         });
@@ -1327,6 +1362,7 @@
       document.querySelectorAll("[data-site-id]").forEach(btn => {
         btn.addEventListener("click", () => {
           state.siteId = btn.dataset.siteId;
+          setupSlideIndex = 0;
           state.forceEmbedOnMobile = true;
           const site = activeSite();
           if (site.dose) {
@@ -1378,72 +1414,208 @@
       }
     }
 
+    const setupImages = {
+      supineLinac: "data:image/webp;base64,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"
+    };
+
     const setupSlidesByTechnique = {
       "IMRT/VMAT": {
         description: "A linear accelerator rotates around the patient while daily image guidance helps align the treatment target.",
         slides: [
-          ["🛏️", "Patient position", "Placeholder for a supine treatment setup image. Replace this with your site-specific patient positioning photo."],
-          ["⚙️", "Treatment machine", "Placeholder for a linear accelerator image, such as TrueBeam or comparable linac."],
-          ["🧩", "Immobilizer", "Placeholder for thermoplastic mask, Vac-Lok cushion, breast board, wing board, or pelvic immobilization device."]
+          { icon: "🛏️", title: "Patient position", text: "Placeholder for a site-specific treatment position image. Replace this with your preferred setup photo.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for a linear accelerator image, such as TrueBeam or comparable linac.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for thermoplastic mask, Vac-Lok cushion, breast board, wing board, or pelvic immobilization device.", image: "" }
         ]
       },
       "3D conformal radiation": {
         description: "A linear accelerator delivers shaped fields from selected beam angles using patient-specific blocks, MLCs, and reproducible setup.",
         slides: [
-          ["🛏️", "Patient position", "Placeholder for conventional supine or site-specific treatment setup."],
-          ["⚙️", "Treatment machine", "Placeholder for a linac delivering 3D conformal fields."],
-          ["🧩", "Immobilizer", "Placeholder for custom cradle, mask, breast board, or extremity setup device."]
+          { icon: "🛏️", title: "Patient position", text: "Placeholder for conventional supine or site-specific treatment setup.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for a linac delivering 3D conformal fields.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for custom cradle, mask, breast board, or extremity setup device.", image: "" }
         ]
       },
       "SBRT/SABR": {
         description: "SBRT/SABR uses highly focused radiation over a small number of treatments, with strict immobilization and motion management when needed.",
         slides: [
-          ["🛏️", "Patient position", "Placeholder for SBRT setup, commonly supine with customized body immobilization."],
-          ["🎯", "Treatment machine", "Placeholder for linac-based SBRT, CyberKnife, or other stereotactic platform."],
-          ["🧩", "Immobilizer", "Placeholder for Vac-Lok cradle, abdominal compression, body frame, or breath-hold setup."]
+          { icon: "🛏️", title: "Patient position", text: "Placeholder for SBRT setup, commonly supine with customized body immobilization.", image: "" },
+          { icon: "🎯", title: "Treatment machine", text: "Placeholder for linac-based SBRT, CyberKnife, or other stereotactic platform.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for Vac-Lok cradle, abdominal compression, body frame, or breath-hold setup.", image: "" }
         ]
       },
       "SRS": {
         description: "SRS uses stereotactic localization and very precise immobilization to treat intracranial targets in one or a few sessions.",
         slides: [
-          ["🛏️", "Patient position", "Placeholder for cranial stereotactic setup."],
-          ["🎯", "Treatment machine", "Placeholder for Gamma Knife, linac SRS, CyberKnife, or comparable system."],
-          ["🧩", "Immobilizer", "Placeholder for frameless mask, stereotactic frame, bite block, or head fixation system."]
+          { icon: "🛏️", title: "Patient position", text: "Placeholder for cranial stereotactic setup.", image: "" },
+          { icon: "🎯", title: "Treatment machine", text: "Placeholder for Gamma Knife, linac SRS, CyberKnife, or comparable system.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for frameless mask, stereotactic frame, bite block, or head fixation system.", image: "" }
         ]
       },
       "Protons": {
         description: "Proton therapy uses charged particles with finite range, often requiring highly reproducible setup and anatomy-specific verification.",
         slides: [
-          ["🛏️", "Patient position", "Placeholder for proton treatment setup."],
-          ["🌀", "Treatment machine", "Placeholder for proton gantry, fixed beam room, or nozzle image."],
-          ["🧩", "Immobilizer", "Placeholder for mask, body mold, breast board, or pediatric immobilization device."]
+          { icon: "🛏️", title: "Patient position", text: "Placeholder for proton treatment setup.", image: "" },
+          { icon: "🌀", title: "Treatment machine", text: "Placeholder for proton gantry, fixed beam room, or nozzle image.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for mask, body mold, breast board, or pediatric immobilization device.", image: "" }
         ]
       },
       "Brachytherapy": {
         description: "Brachytherapy places a radiation source close to or inside the treatment region using applicators, catheters, or seeds.",
         slides: [
-          ["🛏️", "Patient position", "Placeholder for procedure or treatment position."],
-          ["🏥", "Treatment equipment", "Placeholder for HDR afterloader, applicator setup, or procedure suite."],
-          ["🧩", "Applicator/immobilizer", "Placeholder for applicator, template, cylinder, tandem/ring, needles, or site-specific device."]
+          { icon: "🛏️", title: "Patient/procedure position", text: "Placeholder for procedure or treatment position.", image: "" },
+          { icon: "🏥", title: "Treatment equipment", text: "Placeholder for HDR afterloader, applicator setup, or procedure suite.", image: "" },
+          { icon: "🧩", title: "Applicator/immobilizer", text: "Placeholder for applicator, template, cylinder, tandem/ring, needles, or site-specific device.", image: "" }
+        ]
+      }
+    };
+
+    const pelvicSupineSetup = {
+      description: "This site commonly uses a reproducible supine pelvic setup. Daily image guidance helps align the target and nearby pelvic anatomy. The exact setup can change based on bladder, rectal, nodal, postoperative, or SBRT requirements.",
+      slides: [
+        { icon: "🛏️", title: "Supine pelvic treatment position", text: "Supine setup on a linear accelerator. This placeholder is linked for prostate and other pelvic sites where a similar setup may be used.", image: setupImages.supineLinac },
+        { icon: "⚙️", title: "Treatment machine", text: "Placeholder for the treatment machine image. For most external beam pelvic cases this will be a linear accelerator with daily image guidance.", image: "" },
+        { icon: "🧩", title: "Immobilizer", text: "Placeholder for knee sponge, foot immobilizer, leg mold, Vac-Lok, bladder/rectal prep visuals, or other site-specific setup device.", image: "" }
+      ]
+    };
+
+    const setupSlidesBySite = {
+      prostate: {
+        description: "Prostate cancer treatment is typically delivered supine with reproducible pelvic positioning, daily image guidance, and attention to bladder and rectal preparation.",
+        slides: pelvicSupineSetup.slides
+      },
+      bladder: {
+        description: "Bladder treatment often uses a supine pelvic setup, with attention to bladder filling, target motion, bowel position, and daily image guidance.",
+        slides: pelvicSupineSetup.slides
+      },
+      rectal: {
+        description: "Rectal cancer pelvic radiation is commonly delivered supine with reproducible pelvic immobilization and attention to bowel and bladder setup.",
+        slides: pelvicSupineSetup.slides
+      },
+      anal: {
+        description: "Anal cancer radiation commonly uses a reproducible pelvic setup with attention to groins, skin folds, bowel, bladder, and daily image guidance.",
+        slides: pelvicSupineSetup.slides
+      },
+      cervix: {
+        description: "Cervical cancer external beam treatment commonly uses a supine pelvic setup, while brachytherapy uses a separate applicator-based procedural setup.",
+        slides: pelvicSupineSetup.slides
+      },
+      endometrial: {
+        description: "Endometrial cancer pelvic or vaginal cuff treatment commonly uses a reproducible supine setup. Vaginal cuff brachytherapy uses a separate applicator setup.",
+        slides: pelvicSupineSetup.slides
+      },
+      vaginal: {
+        description: "Vaginal cancer treatment may use pelvic external beam positioning and/or brachytherapy applicator positioning depending on the plan.",
+        slides: pelvicSupineSetup.slides
+      },
+      whole-breast: {
+        description: "Whole-breast radiation often uses supine breast-board positioning with the arm raised. Selected patients may use prone setup or breath hold.",
+        slides: [
+          { icon: "🛏️", title: "Breast treatment position", text: "Placeholder for supine breast board setup with arm elevation, prone setup, or DIBH coaching image.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for linac-based breast treatment or tangential field setup.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for breast board, arm support, incline board, DIBH goggles, or surface-guidance image.", image: "" }
+        ]
+      },
+      pbi: {
+        description: "Partial breast irradiation may use supine setup, prone setup, external beam APBI, or brachytherapy depending on the technique.",
+        slides: [
+          { icon: "🛏️", title: "Partial breast position", text: "Placeholder for APBI position image.", image: "" },
+          { icon: "⚙️", title: "Treatment equipment", text: "Placeholder for linac APBI, applicator-based APBI, or brachytherapy equipment.", image: "" },
+          { icon: "🧩", title: "Immobilizer/applicator", text: "Placeholder for breast board, prone board, or applicator image.", image: "" }
+        ]
+      },
+      chest-wall: {
+        description: "Chest wall treatment often uses supine breast-board positioning, sometimes with bolus, scar wire, nodal setup, or DIBH for left-sided cases.",
+        slides: [
+          { icon: "🛏️", title: "Chest wall position", text: "Placeholder for chest wall or post-mastectomy treatment setup.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for linac-based chest wall treatment.", image: "" },
+          { icon: "🧩", title: "Immobilizer/bolus", text: "Placeholder for breast board, arm support, bolus, or DIBH setup image.", image: "" }
+        ]
+      },
+      "regional-nodes": {
+        description: "Regional nodal breast treatment often uses breast-board setup with nodal coverage, arm elevation, and sometimes DIBH or surface guidance.",
+        slides: [
+          { icon: "🛏️", title: "Breast/nodal position", text: "Placeholder for breast and nodal treatment position.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for linac-based breast and regional nodal treatment.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for breast board, arm support, DIBH, or surface-guidance setup.", image: "" }
+        ]
+      }
+    };
+
+    const setupSlidesBySystem = {
+      cns: {
+        description: "CNS radiation usually requires highly reproducible head or spine positioning. Cranial treatments commonly use a thermoplastic mask or stereotactic immobilization.",
+        slides: [
+          { icon: "🛏️", title: "CNS treatment position", text: "Placeholder for supine mask-based cranial setup or spine setup image.", image: "" },
+          { icon: "🎯", title: "Treatment machine", text: "Placeholder for linac SRS, Gamma Knife, proton room, or standard linac image.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for thermoplastic mask, stereotactic frame, headrest, or spine immobilization device.", image: "" }
+        ]
+      },
+      hn: {
+        description: "Head and neck treatment usually uses a custom head, neck, and shoulder mask. Bite blocks, shoulder pulls, or tongue positioning may be added.",
+        slides: [
+          { icon: "🛏️", title: "Head and neck position", text: "Placeholder for supine head and neck setup.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for linac-based head and neck treatment.", image: "" },
+          { icon: "🧩", title: "Immobilizer", text: "Placeholder for thermoplastic mask, bite block, shoulder mask, or headrest image.", image: "" }
+        ]
+      },
+      thoracic: {
+        description: "Thoracic treatment is often supine with arms elevated, sometimes with 4D-CT, breath hold, abdominal compression, or other motion-management tools.",
+        slides: [
+          { icon: "🛏️", title: "Thoracic position", text: "Placeholder for arms-up thoracic setup image.", image: "" },
+          { icon: "⚙️", title: "Treatment machine", text: "Placeholder for linac, SBRT, or proton thoracic treatment image.", image: "" },
+          { icon: "🧩", title: "Immobilizer/motion management", text: "Placeholder for wing board, Vac-Lok, abdominal compression, DIBH, or respiratory monitoring image.", image: "" }
         ]
       }
     };
 
     let setupSlideIndex = 0;
 
-    function updateSetupCard() {
+    function getSetupContext() {
       const technique = $("technique") ? $("technique").value : "IMRT/VMAT";
-      const setup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
-      const slides = setup.slides;
-      setupSlideIndex = setupSlideIndex % slides.length;
-      const [icon, title, text] = slides[setupSlideIndex];
+      const system = activeSystem();
+      const site = activeSite();
+      const techniqueSetup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
+      const siteSetup = setupSlidesBySite[site.id];
+      const systemSetup = setupSlidesBySystem[system.id];
+      const base = siteSetup || systemSetup || techniqueSetup;
+      return {
+        technique,
+        system,
+        site,
+        slides: base.slides || techniqueSetup.slides,
+        description: base.description || techniqueSetup.description,
+        techniqueDescription: techniqueSetup.description
+      };
+    }
 
-      if ($("setupTechniqueLabel")) $("setupTechniqueLabel").textContent = technique;
-      if ($("setupTechniqueText")) $("setupTechniqueText").textContent = setup.description;
-      if ($("setupSubtitle")) $("setupSubtitle").textContent = `${title} preview`;
-      if ($("setupIcon")) $("setupIcon").textContent = icon;
-      if ($("setupImageTitle")) $("setupImageTitle").textContent = title;
-      if ($("setupImageText")) $("setupImageText").textContent = text;
+    function updateSetupCard() {
+      const context = getSetupContext();
+      const slides = context.slides;
+      setupSlideIndex = setupSlideIndex % slides.length;
+      const slide = slides[setupSlideIndex];
+      const image = slide.image || "";
+
+      if ($("setupTechniqueLabel")) $("setupTechniqueLabel").textContent = `${context.site.name} • ${context.technique}`;
+      if ($("setupTechniqueText")) $("setupTechniqueText").textContent = `${context.description} Technique note: ${context.techniqueDescription}`;
+      if ($("setupSubtitle")) $("setupSubtitle").textContent = `${slide.title} preview`;
+      if ($("setupIcon")) $("setupIcon").textContent = slide.icon;
+      if ($("setupImageTitle")) $("setupImageTitle").textContent = slide.title;
+      if ($("setupImageText")) $("setupImageText").textContent = slide.text;
+      if ($("setupMedia")) {
+        $("setupMedia").classList.toggle("has-image", Boolean(image));
+        $("setupMedia").setAttribute("aria-label", `${context.site.name} ${slide.title} preview`);
+      }
+      if ($("setupImage")) {
+        if (image) {
+          $("setupImage").src = image;
+          $("setupImage").alt = `${context.site.name} ${slide.title}`;
+          $("setupImage").hidden = false;
+        } else {
+          $("setupImage").removeAttribute("src");
+          $("setupImage").alt = "";
+          $("setupImage").hidden = true;
+        }
+      }
       if ($("setupDots")) {
         $("setupDots").innerHTML = slides.map((_, index) => `<span class="setup-dot ${index === setupSlideIndex ? "active" : ""}"></span>`).join("");
       }
@@ -1575,9 +1747,8 @@
       }
     }));
     $("setupNextBtn").addEventListener("click", () => {
-      const technique = $("technique").value;
-      const setup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
-      setupSlideIndex = (setupSlideIndex + 1) % setup.slides.length;
+      const context = getSetupContext();
+      setupSlideIndex = (setupSlideIndex + 1) % context.slides.length;
       updateSetupCard();
     });
     $("searchInput").addEventListener("input", e => renderSystems(e.target.value));
