@@ -284,11 +284,20 @@
       align-items: start;
     }
 
-    .workspace > .viewer-card {
+    .workspace > .main-column {
       min-width: 0;
       width: 100%;
       max-width: 840px;
       justify-self: end;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .workspace > .main-column > .viewer-card,
+    .workspace > .main-column > .clinician-notes-wide {
+      width: 100%;
+      min-width: 0;
     }
 
     .workspace > .side-column {
@@ -674,7 +683,7 @@
     }
 
     .clinician-notes-wide {
-      margin-top: 18px;
+      margin-top: 0;
     }
 
     .clinician-notes-wide textarea {
@@ -873,19 +882,19 @@
 
     @media (max-width: 1320px) {
       .workspace { grid-template-columns: minmax(520px, 800px) minmax(400px, 1fr); }
-      .workspace > .viewer-card { max-width: 660px; }
+      .workspace > .main-column { max-width: 660px; }
       .workspace > .side-column { max-width: 620px; }
     }
 
     @media (max-width: 1180px) {
       .workspace { grid-template-columns: minmax(500px, 760px) minmax(380px, 1fr); }
-      .workspace > .viewer-card { max-width: 620px; }
+      .workspace > .main-column { max-width: 620px; }
       .workspace > .side-column { max-width: 640px; }
     }
 
     @media (max-width: 980px) {
       .workspace { grid-template-columns: 1fr; }
-      .workspace > .viewer-card,
+      .workspace > .main-column,
       .workspace > .side-column { max-width: none; justify-self: stretch; }
       .side-column { grid-template-columns: 1fr; }
     }
@@ -1196,6 +1205,7 @@
         </section>
 
       <section class="workspace" aria-label="Cancer education workspace">
+        <div class="main-column">
         <section class="viewer-card" aria-live="polite">
           <div class="viewer-toolbar">
             <div class="viewer-title">
@@ -1253,6 +1263,23 @@
             </div>
           </div>
         </section>
+
+
+
+      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
+        <div class="panel-heading">
+          <div>
+            <h3>Clinician notes</h3>
+            <p>Optional talking points</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="clinicianNotes">Add custom note for this visit</label>
+          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
+        </div>
+        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
+      </section>
+        </div>
 
         <aside class="side-column" aria-label="Treatment setup and dose details">
           <section class="side-card setup-card">
@@ -1329,20 +1356,6 @@
             <div class="timeline" id="timeline"></div>
           </section>
         </aside>
-      </section>
-
-      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
-        <div class="panel-heading">
-          <div>
-            <h3>Clinician notes</h3>
-            <p>Optional talking points</p>
-          </div>
-        </div>
-        <div class="field">
-          <label for="clinicianNotes">Add custom note for this visit</label>
-          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
-        </div>
-        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
       </section>
 
       <section class="print-only">
