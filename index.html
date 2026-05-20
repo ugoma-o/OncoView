@@ -1323,7 +1323,7 @@
             <div class="panel-heading">
               <div>
                 <h3>Symptom timeline</h3>
-                <p>General pattern by treatment phase</p>
+                <p>General pattern by treatment phase. During treatment, patients do not see or feel the beam; most acute symptoms are temporary.</p>
               </div>
             </div>
             <div class="timeline" id="timeline"></div>
@@ -1726,54 +1726,87 @@
       }
     };
 
+    const systemPhaseTimelines = {
+      cns: [
+        { phase: "Early", time: "Week 1", title: "Setup and baseline", summary: "Patients do not see or feel the beam; temporary mask anxiety or mild fatigue can start.", examples: ["Watch for new headache, nausea, weakness, seizure, or vision change."] },
+        { phase: "Peak acute", time: "Weeks 2 to 6", title: "Fatigue and local irritation", summary: "Fatigue, scalp irritation, focal hair loss, nausea, or headache may increase by treated region.", examples: ["Steroids, antiemetics, and urgent evaluation depend on symptoms."] },
+        { phase: "Recovery", time: "1 to 3 months after RT", title: "Acute effects settle", summary: "Energy, skin reaction, nausea, and scalp sensitivity generally improve over weeks.", examples: ["Report worsening neurologic symptoms rather than assuming delayed recovery."] },
+        { phase: "Late", time: "Months to years", title: "Site-specific monitoring", summary: "Late risks depend on dose to brain, optic structures, cochlea, pituitary, brainstem, or spinal cord.", examples: ["Follow neurocognition, endocrine function, hearing, vision, and focal deficits as relevant."] }
+      ],
+      thoracic: [
+        { phase: "Early", time: "Week 1", title: "Baseline respiratory status", summary: "Patients do not see or feel the beam; cough, dyspnea, swallowing, and pain are tracked before symptoms evolve.", examples: ["Continue smoking cessation and pulmonary medications when applicable."] },
+        { phase: "Peak acute", time: "Weeks 2 to 6", title: "Esophagus, lung, and fatigue", summary: "Fatigue, cough, skin irritation, and esophagitis can occur when the esophagus or central chest is treated.", examples: ["Call for poor intake, dehydration, fever, or new shortness of breath."] },
+        { phase: "Recovery", time: "2 to 8 weeks after RT", title: "Acute irritation improves", summary: "Swallowing pain, skin reaction, and fatigue usually ease gradually after treatment ends.", examples: ["Nutrition, hydration, and symptom medications may continue briefly."] },
+        { phase: "Late", time: "Months to years", title: "Pneumonitis and cardiac awareness", summary: "New cough, fever, or dyspnea weeks to months later can suggest pneumonitis and needs evaluation.", examples: ["Long-term monitoring depends on lung, heart, esophagus, and brachial plexus dose."] }
+      ],
+      breast: [
+        { phase: "Early", time: "Week 1", title: "Mild fatigue or none", summary: "Patients do not see or feel the beam; many feel well initially while skin care and arm mobility are reinforced.", examples: ["Use clinic-approved moisturizer and avoid friction over treated skin."] },
+        { phase: "Peak acute", time: "Weeks 2 to 4", title: "Skin and breast/chest wall reaction", summary: "Fatigue, redness or tanning, itching, tenderness, swelling, and underarm irritation may build.", examples: ["Skin reaction often peaks near the end of RT or shortly after."] },
+        { phase: "Recovery", time: "2 to 8 weeks after RT", title: "Skin heals and energy returns", summary: "Acute dermatitis and fatigue usually improve gradually after treatment finishes.", examples: ["Persistent swelling, pain, or reduced shoulder motion should be addressed."] },
+        { phase: "Late", time: "Months to years", title: "Fibrosis and regional effects", summary: "Late changes can include firmness, cosmetic change, edema, rib discomfort, or rare lung/heart effects.", examples: ["Risk depends on laterality, nodal fields, heart/lung dose, and systemic therapy."] }
+      ],
+      gi: [
+        { phase: "Early", time: "Week 1", title: "Bowel baseline", summary: "Patients do not see or feel the beam; bowel pattern, nausea, appetite, pain, and hydration are tracked.", examples: ["Follow bladder, bowel, fasting, or motion instructions when prescribed."] },
+        { phase: "Peak acute", time: "Weeks 2 to 6", title: "GI and pelvic irritation", summary: "Fatigue, diarrhea, cramping, nausea, appetite loss, urinary irritation, or skin reaction may occur by field.", examples: ["Call for dehydration, uncontrolled diarrhea, bleeding, fever, or severe pain."] },
+        { phase: "Recovery", time: "2 to 8 weeks after RT", title: "Inflammation improves", summary: "Most acute bowel, bladder, skin, and appetite effects improve over several weeks.", examples: ["Diet adjustment and symptom medicines may be tapered as tolerated."] },
+        { phase: "Late", time: "Months to years", title: "Organ-specific follow-up", summary: "Late bowel, bladder, sexual, fertility, hepatic, renal, or gastric effects depend on target and dose.", examples: ["Report bleeding, obstruction symptoms, persistent diarrhea, or worsening pain."] }
+      ],
+      gu: [
+        { phase: "Early", time: "Week 1", title: "Bladder and bowel routine", summary: "Patients do not see or feel the beam; urinary and bowel preparation are reinforced for reproducible pelvic setup.", examples: ["A full bladder and empty rectum may reduce normal tissue exposure when prescribed."] },
+        { phase: "Peak acute", time: "Weeks 2 to 6", title: "Urinary, bowel, and fatigue symptoms", summary: "Frequency, urgency, nocturia, dysuria, loose stools, rectal urgency, and fatigue can build.", examples: ["Alpha blockers, hydration, and bowel medicines are individualized."] },
+        { phase: "Recovery", time: "2 to 12 weeks after RT", title: "Symptoms trend down", summary: "Most acute urinary and bowel symptoms improve in the weeks after treatment ends.", examples: ["Persistent burning, fever, retention, or bleeding needs evaluation."] },
+        { phase: "Late", time: "Months to years", title: "Urinary, bowel, and sexual monitoring", summary: "Late effects can include erectile dysfunction, urinary narrowing, incontinence, rectal bleeding, or hematuria.", examples: ["Risk varies by dose, anatomy, technique, surgery history, and baseline function."] }
+      ],
+      gyn: [
+        { phase: "Early", time: "Week 1", title: "Pelvic routine begins", summary: "Patients do not see or feel the beam; bladder, bowel, skin, and discharge symptoms are documented before inflammation peaks.", examples: ["Brachytherapy may add procedure-specific preparation and recovery."] },
+        { phase: "Peak acute", time: "Weeks 2 to 6", title: "Bowel, bladder, skin, and fatigue", summary: "Fatigue, diarrhea, urinary burning or frequency, pelvic cramping, discharge, and groin/vulvar dermatitis may occur.", examples: ["Call for fever, uncontrolled pain, heavy bleeding, or dehydration."] },
+        { phase: "Recovery", time: "2 to 8 weeks after RT", title: "Acute pelvic effects improve", summary: "Bowel, bladder, skin, and energy symptoms usually improve gradually after treatment ends.", examples: ["Vaginal health and dilator guidance are reviewed when appropriate."] },
+        { phase: "Late", time: "Months to years", title: "Pelvic survivorship effects", summary: "Late risks include vaginal stenosis, sexual symptoms, menopause, lymphedema, bowel or bladder changes.", examples: ["Risk depends on EBRT field, brachytherapy, surgery, and chemotherapy."] }
+      ],
+      hn: [
+        { phase: "Early", time: "Week 1", title: "Mask, mouth, and swallow baseline", summary: "Patients do not see or feel the beam; dental precautions, nutrition, swallowing exercises, and mask tolerance are emphasized early.", examples: ["Start oral care before mucositis becomes symptomatic."] },
+        { phase: "Peak acute", time: "Weeks 2 to 7", title: "Mucositis and nutrition risk", summary: "Sore throat, mouth sores, taste change, dry mouth, thick saliva, hoarseness, dermatitis, and weight loss risk can rise.", examples: ["Pain control, hydration, nutrition, and speech/swallow support are key."] },
+        { phase: "Recovery", time: "1 to 3 months after RT", title: "Mucosa and skin heal", summary: "Pain, swallowing, skin reaction, and secretions usually improve, while taste and saliva may recover more slowly.", examples: ["Continue dental, nutrition, and swallow follow-up."] },
+        { phase: "Late", time: "Months to years", title: "Fibrosis and gland effects", summary: "Dry mouth, dental risk, dysphagia, hypothyroidism, lymphedema, trismus, or neck stiffness may develop.", examples: ["Long-term thyroid, dental, and swallowing surveillance is important."] }
+      ],
+      heme: [
+        { phase: "Early", time: "Week 1", title: "Site and systemic therapy baseline", summary: "Patients do not see or feel the beam; symptoms depend on site and overlap with chemotherapy or immunotherapy.", examples: ["Pain flare is possible when treating bone lesions."] },
+        { phase: "Peak acute", time: "During RT", title: "Fatigue and local irritation", summary: "Fatigue, skin changes, mucosal irritation, nausea, or blood count effects vary by field and marrow exposure.", examples: ["Call for fever, bleeding, severe pain, or dehydration."] },
+        { phase: "Recovery", time: "Weeks after RT", title: "Acute effects settle", summary: "Most focal-field effects improve over weeks once treatment ends.", examples: ["Blood count recovery depends on marrow dose and systemic therapy."] },
+        { phase: "Late", time: "Months to years", title: "Field-specific surveillance", summary: "Late effects depend strongly on age, field size, dose, and organs in the treated region.", examples: ["Monitor thyroid, cardiac, lung, breast, fertility, and second cancer risks when relevant."] }
+      ],
+      "skin-sarcoma": [
+        { phase: "Early", time: "Week 1", title: "Skin and function baseline", summary: "Patients do not see or feel the beam; wound status, pain, edema, and range of motion are documented early.", examples: ["Bolus, dressings, or limb positioning may affect daily comfort."] },
+        { phase: "Peak acute", time: "Weeks 2 to 6", title: "Skin and soft-tissue reaction", summary: "Redness, tenderness, peeling, swelling, wound sensitivity, fatigue, stiffness, or pain flare can occur.", examples: ["Wound checks and skin care are individualized."] },
+        { phase: "Recovery", time: "2 to 8 weeks after RT", title: "Dermatitis improves", summary: "Skin irritation and fatigue generally improve, though swelling or wound healing can take longer.", examples: ["Continue motion exercises or wound care as directed."] },
+        { phase: "Late", time: "Months to years", title: "Fibrosis and limb effects", summary: "Late effects can include fibrosis, edema, stiffness, fracture risk, wound issues, or skin color/texture change.", examples: ["Functional follow-up matters for extremity and joint-adjacent treatments."] }
+      ],
+      peds: [
+        { phase: "Preparation", time: "Before RT", title: "Family-centered setup", summary: "Patients do not see or feel the beam; practice, child life support, anesthesia assessment, and caregiver teaching are prioritized.", examples: ["Daily routine and symptom language should match developmental stage."] },
+        { phase: "Peak acute", time: "During RT", title: "Site-specific acute effects", summary: "Fatigue, appetite change, nausea, skin irritation, mucosal symptoms, or hair loss depend on the target.", examples: ["Hydration, nutrition, and anesthesia-related issues are monitored closely."] },
+        { phase: "Recovery", time: "Weeks to months after RT", title: "Healing and reintegration", summary: "Acute symptoms usually improve, while school, therapy, nutrition, and activity needs are reassessed.", examples: ["Follow-up is coordinated with oncology and survivorship teams."] },
+        { phase: "Late", time: "Months to years", title: "Survivorship monitoring", summary: "Growth, endocrine, fertility, neurocognitive, cardiac, pulmonary, renal, and second cancer risks depend on site and dose.", examples: ["Late-effects counseling should be revisited over time."] }
+      ]
+    };
+
     const timelineOverrides = {
       "gu:prostate:IMRT/VMAT": [
-        {
-          phase: "Acute",
-          time: "Weeks 1 to 4",
-          title: "Early treatment inflammation",
-          summary: "During the first month of daily prostate radiation, dose begins accumulating in the pelvis. Temporary inflammation can start in the bladder, urethra, rectum, and surrounding bowel lining.",
-          examples: [
-            "Mild urinary frequency or needing to urinate more often",
-            "Weaker or slower urinary stream",
-            "Mild bowel changes, such as looser stools, gas, or mild rectal sensitivity",
-            "Fatigue often begins around week 2 or 3"
-          ]
-        },
-        {
-          phase: "Subacute",
-          time: "Week 5 to 4 weeks after RT",
-          title: "Peak inflammatory phase",
-          summary: "The final treatment weeks and first month after treatment are often when urinary, bowel, and fatigue symptoms peak because the cumulative dose produces the most urethral and rectal irritation.",
-          examples: [
-            "Radiation cystitis pattern: urgency, burning with urination, nocturia, and frequent voiding",
-            "Radiation proctitis pattern: bowel urgency, frequent bowel movements, rectal pressure, or minor discomfort",
-            "Peak fatigue, with routine tasks feeling heavier",
-            "Possible redness, darkening, or tenderness of the perineal skin when that region receives dose"
-          ]
-        },
-        {
-          phase: "Convalescent",
-          time: "Months 2 to 6 after RT",
-          title: "Recovery and tissue healing",
-          summary: "Healthy pelvic tissues regenerate, inflammation decreases, and most temporary urinary, bowel, and energy-related side effects gradually improve.",
-          examples: [
-            "Bladder and bowel habits gradually move back toward baseline",
-            "Burning with urination resolves and urinary stream strength improves",
-            "Energy commonly rebounds over the first 4 to 8 weeks after the final treatment, though recovery varies"
-          ]
-        },
-        {
-          phase: "Late",
-          time: "6 months to years",
-          title: "Long-term surveillance effects",
-          summary: "Late effects are uncommon with modern conformal prostate IMRT, but can occur months to years later from fibrosis or microscopic vascular and nerve changes.",
-          examples: [
-            "Erectile dysfunction can develop gradually over 1 to 3 years because vascular and nerve effects tend to evolve slowly",
-            "Urethral stricture can cause a progressively weaker stream or difficulty urinating months later",
-            "Chronic proctitis or cystitis is uncommon but can cause intermittent minor rectal bleeding or small traces of blood in the urine"
-          ]
-        }
+        { phase: "Acute", time: "Weeks 1 to 4", title: "Mild urinary/bowel start", summary: "Temporary inflammation begins in the bladder, urethra, rectum, and bowel lining.", examples: ["Frequency, weaker stream, looser stools or gas.", "Fatigue may begin around week 2 or 3."] },
+        { phase: "Subacute", time: "Week 5 to 4 weeks after RT", title: "Peak irritation", summary: "Temporary urinary, rectal, and fatigue symptoms often peak as pelvic dose accumulates.", examples: ["Urgency, dysuria, nocturia, bowel urgency, rectal pressure.", "Fatigue peaks; perineal skin can become tender if in-field."] },
+        { phase: "Convalescent", time: "Months 2 to 6", title: "Recovery phase", summary: "Pelvic inflammation falls and most temporary symptoms fade toward baseline.", examples: ["Urination and bowel habits gradually stabilize.", "Energy often improves over 4 to 8 weeks after RT."] },
+        { phase: "Late", time: "6 months to years", title: "Long-term monitoring", summary: "Late effects are less common with modern IMRT but can evolve slowly over time.", examples: ["Gradual ED, urethral stricture, rectal bleeding, or hematuria.", "Report progressive urinary obstruction or bleeding."] }
+      ],
+      "gu:prostate:SBRT/SABR": [
+        { phase: "Acute", time: "Treatment week", title: "Short-course onset", summary: "Temporary symptoms may start during or shortly after the high-dose treatment week.", examples: ["Frequency, urgency, dysuria, mild bowel urgency.", "Fatigue is usually variable and individualized."] },
+        { phase: "Subacute", time: "Weeks 1 to 6 after SBRT", title: "Peak urinary/bowel irritation", summary: "Temporary urinary and rectal irritation often peaks after the short course is completed.", examples: ["Nocturia, weaker stream, urgency, loose stools.", "Call for retention, fever, severe pain, or bleeding."] },
+        { phase: "Convalescent", time: "Months 2 to 6", title: "Symptoms settle", summary: "Most acute urinary and bowel symptoms improve over weeks to months.", examples: ["Medication support may be tapered as symptoms improve.", "Follow baseline urinary function closely."] },
+        { phase: "Late", time: "6 months to years", title: "Late GU/GI surveillance", summary: "Late urinary, rectal, and sexual effects can occur months to years later.", examples: ["ED, stricture, hematuria, or rectal bleeding are monitored.", "Risk depends on baseline function, dose constraints, and anatomy."] }
+      ],
+      "gu:prostate": [
+        { phase: "Early", time: "First 1 to 3 weeks", title: "Pelvic irritation begins", summary: "Temporary urinary and bowel irritation can build as pelvic dose accumulates.", examples: ["Frequency, urgency, weaker stream, looser stools.", "Fatigue may slowly increase."] },
+        { phase: "Peak", time: "Late RT to 1 month after", title: "Urinary, bowel, fatigue peak", summary: "Temporary symptoms commonly peak near the end of treatment or soon after completion.", examples: ["Dysuria, nocturia, rectal urgency, frequent stools.", "Hydration, alpha blockers, and bowel medicines may help."] },
+        { phase: "Recovery", time: "2 to 6 months", title: "Return toward baseline", summary: "Most acute bladder, bowel, and fatigue symptoms improve gradually.", examples: ["Call if symptoms worsen instead of improve.", "Persistent bleeding, fever, or retention needs evaluation."] },
+        { phase: "Late", time: "6 months to years", title: "Late GU/GI/sexual effects", summary: "Late effects are uncommon but clinically important when present.", examples: ["ED, stricture, rectal bleeding, or hematuria.", "Risk varies by technique, anatomy, and baseline function."] }
       ]
     };
 
@@ -1783,7 +1816,7 @@
       const technique = $("technique") ? $("technique").value : "";
       const siteTechniqueKey = `${system.id}:${site.id}:${technique}`;
       const siteOnlyKey = `${system.id}:${site.id}`;
-      return timelineOverrides[siteTechniqueKey] || timelineOverrides[siteOnlyKey] || system.timeline;
+      return timelineOverrides[siteTechniqueKey] || timelineOverrides[siteOnlyKey] || systemPhaseTimelines[system.id] || system.timeline;
     }
 
     function renderTimelineEntry(entry, siteName) {
