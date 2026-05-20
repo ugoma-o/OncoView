@@ -706,10 +706,16 @@
       border-radius: 18px;
       padding: 18px;
       margin-top: 12px;
+      min-height: 128px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .dose-result strong { font-size: 1.9rem; letter-spacing: -0.05em; display: block; }
     .dose-result span { color: var(--muted); display: block; max-width: 72ch; }
+    .dose-result .dose-placeholder-title { visibility: hidden; height: 1.9rem; line-height: 1.1; }
+    .dose-result .dose-invalid-message { max-width: 52ch; }
 
     .side-column .dose-result {
       width: 100%;
@@ -872,6 +878,233 @@
       .viewer-frame-wrap { min-height: 520px; height: 68vh; }
       .topbar-inner { align-items: flex-start; }
       .nav-actions .btn span.optional { display: none; }
+    }
+
+
+
+    /* Dim clinical theme: softer than light mode, but not as dark as full dark mode. */
+    :root {
+      --bg: #dfe8ec;
+      --surface: #f4f8fa;
+      --surface-soft: #e7f0f3;
+      --ink: #1c2a32;
+      --muted: #5c6f78;
+      --line: rgba(80, 111, 124, 0.20);
+      --primary: #2f7f88;
+      --primary-dark: #205c64;
+      --primary-soft: rgba(47, 127, 136, 0.13);
+      --accent: #7764d8;
+      --warning: #9a5d13;
+      --danger: #a84040;
+      --success: #24724f;
+      --shadow: 0 18px 46px rgba(34, 55, 66, 0.14);
+      --focus: 0 0 0 4px rgba(47, 127, 136, 0.20);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(47, 127, 136, 0.13), transparent 34rem),
+        radial-gradient(circle at top right, rgba(119, 100, 216, 0.10), transparent 32rem),
+        linear-gradient(180deg, #edf4f6 0%, var(--bg) 58%, #d6e2e7 100%);
+      color: var(--ink);
+    }
+
+    a { color: var(--primary-dark); }
+
+    .topbar {
+      background: rgba(232, 241, 244, 0.88);
+      border-bottom-color: var(--line);
+    }
+
+    .brand-mark {
+      background: linear-gradient(135deg, #2f7f88, #74c4c9);
+      box-shadow: 0 12px 28px rgba(47, 127, 136, 0.22);
+    }
+
+    .brand-title,
+    .hero-title-text {
+      color: var(--ink);
+    }
+
+    .brand-subtitle,
+    .lead,
+    .patient-card p,
+    .panel-heading p,
+    .viewer-title p,
+    .quick-item,
+    .system-card span,
+    .site-card span,
+    .info-box p,
+    .info-box li,
+    .setup-media,
+    .setup-caption p,
+    .setup-label,
+    .field label,
+    .dose-result span,
+    .timeline-item p,
+    .tag,
+    .footer {
+      color: var(--muted);
+    }
+
+    .hero-card,
+    .panel,
+    .viewer-card,
+    .side-card,
+    .modal-card,
+    .patient-card {
+      background: rgba(244, 248, 250, 0.94);
+      border-color: var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card::after {
+      background: rgba(119, 100, 216, 0.10);
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      border-color: var(--line);
+      box-shadow: 0 8px 22px rgba(34, 55, 66, 0.08);
+    }
+
+    .btn:hover {
+      box-shadow: 0 12px 28px rgba(34, 55, 66, 0.13);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #2f7f88, #69bac0);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .btn.ghost {
+      background: transparent;
+    }
+
+    .quick-item,
+    .metric,
+    .system-card,
+    .site-card,
+    .info-box,
+    .setup-caption,
+    .timeline-item,
+    .embed-editor {
+      background: rgba(255, 255, 255, 0.78);
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .quick-item b,
+    .system-card strong,
+    .site-card strong,
+    .info-box h4,
+    .setup-media strong,
+    .setup-caption strong,
+    .timeline-item strong,
+    .modal-head h2,
+    .panel-heading h2,
+    .panel-heading h3,
+    .viewer-title h2,
+    .patient-card h2,
+    .dose-result strong {
+      color: var(--ink);
+    }
+
+    .system-card:hover,
+    .site-card:hover {
+      border-color: rgba(47, 127, 136, 0.48);
+      background: rgba(248, 252, 253, 0.96);
+    }
+
+    .system-card.active,
+    .site-card.active {
+      background: rgba(47, 127, 136, 0.13);
+      border-color: rgba(47, 127, 136, 0.55);
+    }
+
+    .icon-bubble,
+    .empty-viewer-inner .big-icon,
+    .setup-placeholder-icon {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: var(--line);
+    }
+
+    .system-card.active .icon-bubble {
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .viewer-toolbar {
+      background: rgba(244, 248, 250, 0.90);
+      border-bottom-color: var(--line);
+    }
+
+    .viewer-frame-wrap,
+    .mobile-viewer-launch,
+    .setup-media {
+      background:
+        linear-gradient(135deg, rgba(47, 127, 136, 0.10), rgba(119, 100, 216, 0.08)),
+        #e8f0f3;
+    }
+
+    .empty-viewer-inner,
+    .mobile-viewer-card {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: var(--line);
+      box-shadow: 0 18px 40px rgba(34, 55, 66, 0.13);
+    }
+
+    .content-section,
+    .dose-inline-card,
+    .footer {
+      border-color: var(--line);
+    }
+
+    .search-box input,
+    .field input,
+    .field select,
+    .field textarea {
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .search-box input::placeholder,
+    .field textarea::placeholder {
+      color: #7a8d96;
+    }
+
+    .dose-result {
+      background: linear-gradient(135deg, rgba(47, 127, 136, 0.13), rgba(119, 100, 216, 0.10));
+      border-color: rgba(47, 127, 136, 0.30);
+    }
+
+    .tag {
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--line);
+    }
+
+    .setup-dot {
+      background: rgba(92, 111, 120, 0.28);
+    }
+
+    .setup-dot.active {
+      background: var(--primary);
+    }
+
+    .notice {
+      background: rgba(255, 247, 237, 0.92);
+      border-color: rgba(154, 93, 19, 0.22);
+      color: #6d3e05;
+    }
+
+    .modal-backdrop {
+      background: rgba(28, 42, 50, 0.42);
+    }
+
+    .footer-inner {
+      color: var(--muted);
     }
 
     @media print {
@@ -1518,7 +1751,10 @@
       const valid = total > 0 && fractions > 0 && perWeek > 0;
 
       if (!valid) {
-        $("doseResult").innerHTML = `<span>Enter a valid dose and number of treatments.</span>`;
+        $("doseResult").innerHTML = `
+          <strong class="dose-placeholder-title">Dose</strong>
+          <span class="dose-invalid-message">Enter a valid dose and number of treatments.</span>
+        `;
         $("doseTags").innerHTML = "";
         return;
       }
