@@ -897,6 +897,13 @@
       .workspace > .main-column,
       .workspace > .side-column { max-width: none; justify-self: stretch; }
       .side-column { grid-template-columns: 1fr; }
+
+      /* In narrow, one-column mode, visually flatten the main column so the
+         clinician notes can move after the right-side setup/timeline column. */
+      .workspace > .main-column { display: contents; }
+      .workspace > .main-column > .viewer-card { order: 1; }
+      .workspace > .side-column { order: 2; }
+      .workspace > .main-column > .clinician-notes-wide { order: 3; margin-top: 0; }
     }
 
     @media (max-width: 860px) {
