@@ -617,6 +617,25 @@
       max-width: 44ch;
     }
 
+
+    .setup-media.has-image {
+      padding: 0;
+      overflow: hidden;
+      border-style: solid;
+      background: var(--surface-soft);
+    }
+
+    .setup-preview-img {
+      width: 100%;
+      height: 100%;
+      min-height: 310px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      border-radius: 22px;
+      background: var(--surface-soft);
+    }
+
     .setup-placeholder-icon {
       width: 76px;
       height: 76px;
@@ -1695,6 +1714,28 @@
       }
     }
 
+
+
+    const setupImageLibrary = {
+      "gu:prostate": {
+        "IMRT/VMAT": {
+          position: "images/genitourinary/prostate/position.png",
+          machine: "images/genitourinary/prostate/machine.png",
+          immobilizer: "images/genitourinary/prostate/immobilizer.png"
+        },
+        "3D conformal radiation": {
+          position: "images/genitourinary/prostate/position.png",
+          machine: "images/genitourinary/prostate/machine.png",
+          immobilizer: "images/genitourinary/prostate/immobilizer.png"
+        },
+        "SBRT/SABR": {
+          position: "images/genitourinary/prostate/position.png",
+          machine: "images/genitourinary/prostate/machine.png",
+          immobilizer: "images/genitourinary/prostate/immobilizer.png"
+        }
+      }
+    };
+
     const setupSlidesByTechnique = {
       "IMRT/VMAT": {
         description: "A linear accelerator rotates around the patient while daily image guidance helps align the treatment target.",
@@ -1877,19 +1918,61 @@
 
     let setupSlideIndex = 0;
 
+    function getSetupSlideType(title) {
+      const normalized = String(title || "").toLowerCase();
+      if (normalized.includes("position")) return "position";
+      if (normalized.includes("machine") || normalized.includes("equipment")) return "machine";
+      if (normalized.includes("immobilizer") || normalized.includes("applicator")) return "immobilizer";
+      return "";
+    }
+
+    function renderSetupPlaceholder(icon, title, text) {
+      if (!$('setupMedia')) return;
+      $('setupMedia').classList.remove('has-image');
+      $('setupMedia').innerHTML = `
+        <div class="setup-placeholder-icon" id="setupIcon">${icon}</div>
+        <div>
+          <strong id="setupImageTitle">${title}</strong>
+          <p id="setupImageText">${text}</p>
+        </div>
+      `;
+    }
+
     function updateSetupCard() {
       const technique = $("technique") ? $("technique").value : "IMRT/VMAT";
+      const system = activeSystem();
+      const site = activeSite();
+      const key = embedKey(system.id, site.id);
       const setup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
       const slides = setup.slides;
       setupSlideIndex = setupSlideIndex % slides.length;
       const [icon, title, text] = slides[setupSlideIndex];
+      const slideType = getSetupSlideType(title);
+      const imagePath =
+        setupImageLibrary[key]?.[technique]?.[slideType] ||
+        setupImageLibrary[key]?.["IMRT/VMAT"]?.[slideType] ||
+        "";
 
       if ($("setupTechniqueLabel")) $("setupTechniqueLabel").textContent = technique;
       if ($("setupTechniqueText")) $("setupTechniqueText").textContent = setup.description;
       if ($("setupSubtitle")) $("setupSubtitle").textContent = `${title} preview`;
-      if ($("setupIcon")) $("setupIcon").textContent = icon;
-      if ($("setupImageTitle")) $("setupImageTitle").textContent = title;
-      if ($("setupImageText")) $("setupImageText").textContent = text;
+
+      if ($("setupMedia")) {
+        if (imagePath) {
+          $("setupMedia").classList.add("has-image");
+          $("setupMedia").innerHTML = `
+            <img
+              src="${imagePath}"
+              alt="${site.name} ${title.toLowerCase()} preview"
+              class="setup-preview-img"
+              onerror="this.closest('.setup-media').classList.remove('has-image'); this.closest('.setup-media').innerHTML = '<div class=&quot;setup-placeholder-icon&quot;>⚠️</div><div><strong>Image not found</strong><p>Check that the file path exists: ${imagePath}</p></div>';"
+            />
+          `;
+        } else {
+          renderSetupPlaceholder(icon, title, text);
+        }
+      }
+
       if ($("setupDots")) {
         $("setupDots").innerHTML = slides.map((_, index) => `<span class="setup-dot ${index === setupSlideIndex ? "active" : ""}"></span>`).join("");
       }
