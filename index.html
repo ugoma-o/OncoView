@@ -1110,7 +1110,7 @@
         sites: [
           { id: "nsclc", name: "Non-small cell lung cancer", hint: "Central or peripheral lung", tags: ["lung", "IMRT", "SBRT"], dose: [60, 30] },
           { id: "sclc", name: "Small cell lung cancer", hint: "Thorax and PCI discussion", tags: ["chemoRT", "thorax"], dose: [45, 30] },
-          { id: "esophagus", name: "Esophageal cancer", hint: "Swallowing symptoms", tags: ["GI", "thorax", "chemoRT"], dose: [50.4, 28] },
+          { id: "esophagus", name: "Esophageal cancer", hint: "Swallowing symptoms", tags: ["Gastrointestinal", "thorax", "chemoRT"], dose: [50.4, 28] },
           { id: "mediastinum", name: "Mediastinal lymphoma", hint: "Heart and breast sparing", tags: ["lymphoma", "ISRT"], dose: [30, 15] }
         ],
         timeline: [
@@ -1138,8 +1138,8 @@
         ]
       },
       {
-        id: "gi", icon: "🧬", name: "GI", subtitle: "Pancreas, rectum, liver, anal", defaultDose: [50.4, 28],
-        purpose: "GI radiation may be used before surgery, after surgery, definitively with chemotherapy, or for palliation, with careful attention to bowel, stomach, liver, kidneys, bladder, and spinal cord.",
+        id: "Gastrointestinal", icon: "🧬", name: "Gastrointestinal", subtitle: "Pancreas, rectum, liver, anal", defaultDose: [50.4, 28],
+        purpose: "Gastrointestinalradiation may be used before surgery, after surgery, definitively with chemotherapy, or for palliation, with careful attention to bowel, stomach, liver, kidneys, bladder, and spinal cord.",
         expectation: "Simulation instructions may include fasting, bladder filling, bowel preparation, contrast, or motion management depending on the target.",
         support: ["Antidiarrheals or bowel regimen depending on symptoms", "Nutrition and hydration planning", "Nausea management", "Perianal skin care for pelvic/anal fields"],
         position: "Often supine. Some pelvic treatments use customized immobilization and bladder/rectal preparation to improve reproducibility.",
@@ -1156,8 +1156,8 @@
         ]
       },
       {
-        id: "gu", icon: "🧫", name: "GU", subtitle: "Prostate, bladder, kidney, testis", defaultDose: [70, 28],
-        purpose: "GU radiation treats prostate, bladder, penile, testicular, kidney, adrenal, or metastatic targets while reducing dose to bowel, bladder, rectum, urethra, kidneys, and sexual organs when feasible.",
+        id: "Genitourinary", icon: "🧫", name: "Genitourinary", subtitle: "Prostate, bladder, kidney, testis", defaultDose: [70, 28],
+        purpose: "Genitourinaryradiation treats prostate, bladder, penile, testicular, kidney, adrenal, or metastatic targets while reducing dose to bowel, bladder, rectum, urethra, kidneys, and sexual organs when feasible.",
         expectation: "Pelvic treatment often depends on reproducible bladder and rectal filling. Prostate treatment may use fiducials, MRI fusion, or rectal spacer in selected cases.",
         support: ["Bladder filling and bowel routine coaching", "Alpha blocker discussion for urinary symptoms", "Hydration guidance", "Sexual health and fertility counseling when relevant"],
         position: "Usually supine. Prostate or pelvic cases may use leg immobilization and daily image guidance.",
