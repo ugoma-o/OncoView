@@ -893,7 +893,7 @@
           </div>
           <div class="search-box">
             <label class="sr-only" for="searchInput">Search cancer sites</label>
-            <input id="searchInput" type="search" placeholder="Search CNS, prostate, lung..." autocomplete="off" />
+            <input id="searchInput" type="search" placeholder="Search Neurologic, prostate, lung..." autocomplete="off" />
           </div>
           <div class="system-grid" id="systemGrid"></div>
         </section>
@@ -1084,7 +1084,7 @@
   <script>
     const systems = [
       {
-        id: "cns", icon: "🧠", name: "CNS", subtitle: "Brain, spine, skull base", defaultDose: [60, 30],
+        id: "Neurologic", icon: "🧠", name: "Neurologic", subtitle: "Brain, spine, skull base", defaultDose: [60, 30],
         purpose: "Radiation may be used after surgery, as definitive treatment, or for palliation to treat visible tumor and microscopic disease while respecting dose limits to the brainstem, optic apparatus, cochlea, spinal cord, and other critical structures.",
         expectation: "Patients often need a custom thermoplastic mask or immobilization setup. Treatment is usually painless and brief, but planning is highly individualized because millimeters matter around eloquent structures.",
         support: ["Steroids only when clinically indicated for edema", "Antiemetics if nausea develops", "Fatigue counseling and sleep/activity pacing", "Skin and scalp care when hair-bearing scalp receives dose"],
@@ -1253,7 +1253,7 @@
         position: "Positioning depends on age, site, and ability to cooperate. Anesthesia or sedation may be needed for reproducible daily treatment.",
         sites: [
           { id: "medulloblastoma", name: "Medulloblastoma", hint: "CSI and boost", tags: ["CSI", "protons"], dose: [54, 30] },
-          { id: "ependymoma", name: "Ependymoma", hint: "Focal CNS RT", tags: ["CNS", "conformal"], dose: [59.4, 33] },
+          { id: "ependymoma", name: "Ependymoma", hint: "Focal Neurologic RT", tags: ["Neurologic", "conformal"], dose: [59.4, 33] },
           { id: "rhabdomyosarcoma", name: "Rhabdomyosarcoma", hint: "Site-specific", tags: ["peds", "chemoRT"], dose: [50.4, 28] },
           { id: "wilms", name: "Wilms tumor", hint: "Flank/whole abdomen/lung", tags: ["kidney", "peds"], dose: [10.8, 6] }
         ],
