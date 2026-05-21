@@ -297,6 +297,7 @@
     }
 
     .workspace > .main-column > .viewer-card,
+    .workspace > .main-column > .setup-card,
     .workspace > .main-column > .clinician-notes-wide {
       width: 100%;
       min-width: 0;
@@ -972,11 +973,12 @@
       .side-column { grid-template-columns: 1fr; }
 
       /* In narrow, one-column mode, visually flatten the main column so the
-         clinician notes can move after the right-side setup/timeline column. */
+         clinician notes can remain last after the setup, explanation, and timeline cards. */
       .workspace > .main-column { display: contents; }
       .workspace > .main-column > .viewer-card { order: 1; }
-      .workspace > .side-column { order: 2; }
-      .workspace > .main-column > .clinician-notes-wide { order: 3; margin-top: 0; }
+      .workspace > .main-column > .setup-card { order: 2; }
+      .workspace > .side-column { order: 3; }
+      .workspace > .main-column > .clinician-notes-wide { order: 4; margin-top: 0; }
     }
 
     @media (max-width: 860px) {
@@ -1313,14 +1315,6 @@
             </div>
             <button class="btn small" id="openModelBtn" type="button">Open model</button>
           </div>
-          <div class="content-section">
-            <div class="panel-heading">
-              <div>
-                <h3 id="siteHeading">Disease sites</h3>
-                <p>Pick the most relevant clinical scenario</p>
-              </div>
-            </div>
-            <div class="site-grid" id="siteGrid"></div>
           <div class="viewer-frame-wrap" id="viewerWrap">
             <div class="empty-viewer" id="emptyViewer">
               <div class="empty-viewer-inner">
@@ -1342,53 +1336,16 @@
               </div>
             </div>
           </div>
-          </div>
-        </section>
-
-
-
-      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
-        <div class="panel-heading">
-          <div>
-            <h3>Clinician notes</h3>
-            <p>Optional talking points</p>
-          </div>
-        </div>
-        <div class="field">
-          <label for="clinicianNotes">Add custom note for this visit</label>
-          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
-        </div>
-        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
-      </section>
-        </div>
-
-        <aside class="side-column" aria-label="Treatment setup and dose details">
-          <section class="side-card education-card" aria-label="Radiation treatment explanation">
+          <div class="content-section">
             <div class="panel-heading">
               <div>
-                <h3>Treatment explanation</h3>
-                <p>Patient-facing overview for the selected disease site</p>
+                <h3 id="siteHeading">Disease sites</h3>
+                <p>Pick the most relevant clinical scenario</p>
               </div>
             </div>
-            <div class="detail-grid">
-              <div class="info-box">
-                <h4>What radiation is doing</h4>
-                <p id="radiationPurpose">Radiation uses targeted high-energy beams to treat tumor cells while limiting dose to nearby normal tissues whenever possible.</p>
-              </div>
-              <div class="info-box">
-                <h4>What the patient should expect</h4>
-                <p id="expectationText">Treatment usually begins with consultation, simulation, immobilization, planning, quality assurance, then daily or near-daily treatment visits depending on the regimen.</p>
-              </div>
-              <div class="info-box">
-                <h4>Common supportive care</h4>
-                <ul id="supportiveCare"></ul>
-              </div>
-              <div class="info-box">
-                <h4>Positioning preview</h4>
-                <p id="positioningText">Future module: show patient setup position, immobilization devices, breath-hold or bladder/rectal prep when relevant.</p>
-              </div>
-            </div>
-          </section>
+            <div class="site-grid" id="siteGrid"></div>
+          </div>
+        </section>
           <section class="side-card setup-card">
             <div class="panel-heading">
               <div>
@@ -1452,6 +1409,49 @@
             </div>
           </section>
 
+
+      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
+        <div class="panel-heading">
+          <div>
+            <h3>Clinician notes</h3>
+            <p>Optional talking points</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="clinicianNotes">Add custom note for this visit</label>
+          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
+        </div>
+        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
+      </section>
+        </div>
+
+        <aside class="side-column" aria-label="Treatment explanation and symptom timeline">
+          <section class="side-card education-card" aria-label="Radiation treatment explanation">
+            <div class="panel-heading">
+              <div>
+                <h3>Treatment explanation</h3>
+                <p>Patient-facing overview for the selected disease site</p>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="info-box">
+                <h4>What radiation is doing</h4>
+                <p id="radiationPurpose">Radiation uses targeted high-energy beams to treat tumor cells while limiting dose to nearby normal tissues whenever possible.</p>
+              </div>
+              <div class="info-box">
+                <h4>What the patient should expect</h4>
+                <p id="expectationText">Treatment usually begins with consultation, simulation, immobilization, planning, quality assurance, then daily or near-daily treatment visits depending on the regimen.</p>
+              </div>
+              <div class="info-box">
+                <h4>Common supportive care</h4>
+                <ul id="supportiveCare"></ul>
+              </div>
+              <div class="info-box">
+                <h4>Positioning preview</h4>
+                <p id="positioningText">Future module: show patient setup position, immobilization devices, breath-hold or bladder/rectal prep when relevant.</p>
+              </div>
+            </div>
+          </section>
           <section class="side-card symptom-card">
             <div class="panel-heading">
               <div>
@@ -1464,6 +1464,7 @@
         </aside>
       </section>
 
+      
       <section class="print-only">
         <h2>Patient summary</h2>
         <p id="printSummary"></p>
