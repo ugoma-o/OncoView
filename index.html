@@ -588,6 +588,15 @@
     .info-box h4 { margin-bottom: 8px; letter-spacing: -0.02em; }
     .info-box p, .info-box li { color: var(--muted); font-size: 0.94rem; }
     .info-box ul { margin: 0; padding-left: 18px; }
+    .education-card .detail-grid {
+      grid-template-columns: 1fr;
+      margin-top: 0;
+    }
+
+    .education-card .info-box {
+      background: rgba(248, 251, 252, 0.88);
+    }
+
 
     .side-column {
       display: grid;
@@ -1333,25 +1342,6 @@
               </div>
             </div>
           </div>
-
-            <div class="detail-grid">
-              <div class="info-box">
-                <h4>What radiation is doing</h4>
-                <p id="radiationPurpose">Radiation uses targeted high-energy beams to treat tumor cells while limiting dose to nearby normal tissues whenever possible.</p>
-              </div>
-              <div class="info-box">
-                <h4>What the patient should expect</h4>
-                <p id="expectationText">Treatment usually begins with consultation, simulation, immobilization, planning, quality assurance, then daily or near-daily treatment visits depending on the regimen.</p>
-              </div>
-              <div class="info-box">
-                <h4>Common supportive care</h4>
-                <ul id="supportiveCare"></ul>
-              </div>
-              <div class="info-box">
-                <h4>Positioning preview</h4>
-                <p id="positioningText">Future module: show patient setup position, immobilization devices, breath-hold or bladder/rectal prep when relevant.</p>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -1373,6 +1363,32 @@
         </div>
 
         <aside class="side-column" aria-label="Treatment setup and dose details">
+          <section class="side-card education-card" aria-label="Radiation treatment explanation">
+            <div class="panel-heading">
+              <div>
+                <h3>Treatment explanation</h3>
+                <p>Patient-facing overview for the selected disease site</p>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="info-box">
+                <h4>What radiation is doing</h4>
+                <p id="radiationPurpose">Radiation uses targeted high-energy beams to treat tumor cells while limiting dose to nearby normal tissues whenever possible.</p>
+              </div>
+              <div class="info-box">
+                <h4>What the patient should expect</h4>
+                <p id="expectationText">Treatment usually begins with consultation, simulation, immobilization, planning, quality assurance, then daily or near-daily treatment visits depending on the regimen.</p>
+              </div>
+              <div class="info-box">
+                <h4>Common supportive care</h4>
+                <ul id="supportiveCare"></ul>
+              </div>
+              <div class="info-box">
+                <h4>Positioning preview</h4>
+                <p id="positioningText">Future module: show patient setup position, immobilization devices, breath-hold or bladder/rectal prep when relevant.</p>
+              </div>
+            </div>
+          </section>
           <section class="side-card setup-card">
             <div class="panel-heading">
               <div>
