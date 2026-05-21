@@ -599,6 +599,75 @@
       background: rgba(248, 251, 252, 0.88);
     }
 
+    .treatment-course-card {
+      min-height: 360px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .course-flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .course-step {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(248, 251, 252, 0.88);
+      padding: 13px;
+    }
+
+    .course-step-marker {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary-soft), rgba(139, 92, 246, 0.16));
+      color: var(--primary-dark);
+      font-weight: 900;
+      border: 1px solid rgba(31, 111, 120, 0.22);
+    }
+
+    .course-step strong {
+      display: block;
+      margin-bottom: 3px;
+      letter-spacing: -0.02em;
+    }
+
+    .course-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .course-connector {
+      width: 2px;
+      height: 14px;
+      background: var(--line);
+      margin-left: 21px;
+      border-radius: 999px;
+    }
+
+    .course-summary {
+      border-radius: 18px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-soft), rgba(139, 92, 246, 0.12));
+      border: 1px solid rgba(31, 111, 120, 0.22);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .course-summary b {
+      color: var(--ink);
+    }
+
 
     .side-column {
       display: grid;
@@ -1461,6 +1530,42 @@
               </div>
             </div>
           </section>
+
+          <section class="side-card treatment-course-card" aria-label="Treatment course">
+            <div class="panel-heading">
+              <div>
+                <h3>Treatment course</h3>
+                <p>Typical path from planning scan to follow-up</p>
+              </div>
+            </div>
+            <div class="course-flow">
+              <div class="course-step">
+                <div class="course-step-marker" aria-hidden="true">1</div>
+                <div>
+                  <strong>CT simulation</strong>
+                  <p id="courseSimText">A planning scan maps the anatomy and confirms reproducible positioning.</p>
+                </div>
+              </div>
+              <div class="course-connector" aria-hidden="true"></div>
+              <div class="course-step">
+                <div class="course-step-marker" aria-hidden="true">2</div>
+                <div>
+                  <strong>Treatment sessions</strong>
+                  <p id="courseTreatmentText">Treatments are delivered on the selected schedule. Patients do not see or feel the beam.</p>
+                </div>
+              </div>
+              <div class="course-connector" aria-hidden="true"></div>
+              <div class="course-step">
+                <div class="course-step-marker" aria-hidden="true">3</div>
+                <div>
+                  <strong>Follow-up</strong>
+                  <p id="courseFollowText">The team checks recovery, side effects, and the next surveillance plan.</p>
+                </div>
+              </div>
+            </div>
+            <div class="course-summary" id="courseSummary"><b>Course overview:</b> Select a site and dose to show the expected treatment path.</div>
+          </section>
+
           <section class="side-card symptom-card">
             <div class="panel-heading">
               <div>
@@ -2091,6 +2196,32 @@
       $("printSummary").textContent = `${system.name}: ${site.name}. ${system.purpose} Expected course: ${system.expectation}`;
     }
 
+    function updateTreatmentCourse() {
+      if (!$('courseSimText') || !$('courseTreatmentText') || !$('courseFollowText') || !$('courseSummary')) return;
+
+      const system = activeSystem();
+      const site = activeSite();
+      const total = parseFloat($('totalDose').value);
+      const fractions = parseFloat($('fractions').value);
+      const perWeek = parseFloat($('treatmentsPerWeek').value);
+      const technique = $('technique').value;
+      const valid = total > 0 && fractions > 0 && perWeek > 0;
+      const fmt = (value) => Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '');
+
+      $('courseSimText').textContent = `${site.name}: CT simulation maps the treatment area, nearby organs, and the setup position.`;
+
+      if (valid) {
+        const weeks = fractions / perWeek;
+        $('courseTreatmentText').textContent = `${fmt(fractions)} treatment${fractions === 1 ? '' : 's'} over about ${weeks.toFixed(1).replace(/\.0$/, '')} week${weeks === 1 ? '' : 's'} using ${technique}. The beam is not seen or felt.`;
+        $('courseSummary').innerHTML = `<b>Course overview:</b> ${fmt(total)} Gy in ${fmt(fractions)} treatment${fractions === 1 ? '' : 's'} for ${system.name.toLowerCase()} / ${site.name.toLowerCase()}, followed by recovery monitoring and surveillance.`;
+      } else {
+        $('courseTreatmentText').textContent = `Treatment sessions are delivered according to the finalized plan. Patients do not see or feel the beam.`;
+        $('courseSummary').innerHTML = `<b>Course overview:</b> Enter the dose and number of treatments to show the expected schedule.`;
+      }
+
+      $('courseFollowText').textContent = `Follow-up reviews symptom recovery, late-effect monitoring, and site-specific surveillance or imaging as appropriate.`;
+    }
+
     function updateDose() {
       const total = parseFloat($("totalDose").value);
       const fractions = parseFloat($("fractions").value);
@@ -2104,6 +2235,7 @@
           <span class="dose-invalid-message">Enter a valid dose and number of treatments.</span>
         `;
         $("doseTags").innerHTML = "";
+        updateTreatmentCourse();
         return;
       }
 
@@ -2121,6 +2253,7 @@
       if (fractions >= 25) descriptors.push("conventional course");
       descriptors.push(technique);
       $("doseTags").innerHTML = descriptors.map(x => `<span class="tag">${x}</span>`).join("");
+      updateTreatmentCourse();
     }
 
     function renderEmbedEditors() {
