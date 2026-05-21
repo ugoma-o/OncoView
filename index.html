@@ -538,6 +538,14 @@
       border-top: 1px solid var(--line);
     }
 
+
+    .content-section .viewer-frame-wrap {
+      margin: 14px 0;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
     .site-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -592,8 +600,8 @@
 
     .setup-media {
       position: relative;
-      height: 360px;
-      min-height: 360px;
+      height: 460px;
+      min-height: 460px;
       border: 1px dashed rgba(31, 111, 120, 0.35);
       border-radius: 22px;
       background:
@@ -631,7 +639,7 @@
     .setup-preview-img {
       width: 100%;
       height: 100%;
-      min-height: 360px;
+      min-height: 460px;
       object-fit: contain;
       object-position: center;
       display: block;
@@ -967,8 +975,8 @@
       .hero-metrics { grid-template-columns: 1fr; }
       .brand-subtitle { display: none; }
       .viewer-frame-wrap { min-height: 520px; height: 68vh; }
-      .setup-media { height: 320px; min-height: 320px; padding: 22px 50px; }
-      .setup-preview-img { min-height: 320px; }
+      .setup-media { height: 420px; min-height: 420px; padding: 22px 50px; }
+      .setup-preview-img { min-height: 420px; }
       .topbar-inner { align-items: flex-start; }
       .nav-actions .btn span.optional { display: none; }
     }
@@ -1276,6 +1284,14 @@
             </div>
             <button class="btn small" id="openModelBtn" type="button">Open model</button>
           </div>
+          <div class="content-section">
+            <div class="panel-heading">
+              <div>
+                <h3 id="siteHeading">Disease sites</h3>
+                <p>Pick the most relevant clinical scenario</p>
+              </div>
+            </div>
+            <div class="site-grid" id="siteGrid"></div>
           <div class="viewer-frame-wrap" id="viewerWrap">
             <div class="empty-viewer" id="emptyViewer">
               <div class="empty-viewer-inner">
@@ -1297,14 +1313,7 @@
               </div>
             </div>
           </div>
-          <div class="content-section">
-            <div class="panel-heading">
-              <div>
-                <h3 id="siteHeading">Disease sites</h3>
-                <p>Pick the most relevant clinical scenario</p>
-              </div>
-            </div>
-            <div class="site-grid" id="siteGrid"></div>
+
             <div class="detail-grid">
               <div class="info-box">
                 <h4>What radiation is doing</h4>
