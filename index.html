@@ -443,12 +443,12 @@
 
     .viewer-frame-wrap {
       position: relative;
-      aspect-ratio: 16 / 12;
+      aspect-ratio: 16 / 13;
       background:
         linear-gradient(135deg, rgba(31, 111, 120, 0.12), rgba(139, 92, 246, 0.10)),
         #eff5f6;
-      min-height: 620px;
-      height: clamp(620px, 72vh, 920px);
+      min-height: 660px;
+      height: clamp(660px, 76vh, 960px);
     }
 
     iframe.model-frame {
@@ -543,7 +543,8 @@
 
 
     .content-section .viewer-frame-wrap {
-      max-width: 760px;
+      max-width: 720px;
+      width: min(100%, 720px);
       margin: 14px auto;
       border-radius: 22px;
       overflow: hidden;
@@ -988,7 +989,7 @@
       .detail-grid { grid-template-columns: 1fr; }
       .hero-metrics { grid-template-columns: 1fr; }
       .brand-subtitle { display: none; }
-      .viewer-frame-wrap { min-height: 520px; height: 68vh; }
+      .viewer-frame-wrap { min-height: 560px; height: 72vh; }
       .setup-media { height: 420px; min-height: 420px; padding: 22px 50px; }
       .setup-preview-img { min-height: 420px; }
       .topbar-inner { align-items: flex-start; }
