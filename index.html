@@ -591,7 +591,9 @@
     }
 
     .setup-media {
-      min-height: 310px;
+      position: relative;
+      height: 360px;
+      min-height: 360px;
       border: 1px dashed rgba(31, 111, 120, 0.35);
       border-radius: 22px;
       background:
@@ -600,8 +602,9 @@
       display: grid;
       place-items: center;
       text-align: center;
-      padding: 24px;
+      padding: 24px 54px;
       color: var(--muted);
+      overflow: hidden;
     }
 
     .setup-media strong {
@@ -628,12 +631,43 @@
     .setup-preview-img {
       width: 100%;
       height: 100%;
-      min-height: 310px;
+      min-height: 360px;
       object-fit: contain;
       object-position: center;
       display: block;
       border-radius: 22px;
       background: var(--surface-soft);
+    }
+
+    .setup-carousel-btn {
+      position: absolute;
+      top: 50%;
+      z-index: 4;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      transform: translateY(-50%);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(24, 33, 47, 0.14);
+      font-size: 1.2rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .setup-carousel-btn:hover {
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    .setup-carousel-btn.prev { left: 12px; }
+    .setup-carousel-btn.next { right: 12px; }
+
+    .setup-media.has-image .setup-carousel-btn {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(6px);
     }
 
     .setup-placeholder-icon {
@@ -933,6 +967,8 @@
       .hero-metrics { grid-template-columns: 1fr; }
       .brand-subtitle { display: none; }
       .viewer-frame-wrap { min-height: 520px; height: 68vh; }
+      .setup-media { height: 320px; min-height: 320px; padding: 22px 50px; }
+      .setup-preview-img { min-height: 320px; }
       .topbar-inner { align-items: flex-start; }
       .nav-actions .btn span.optional { display: none; }
     }
@@ -1314,7 +1350,6 @@
                 <h3>Treatment setup preview</h3>
                 <p id="setupSubtitle">Positioning, machine, and immobilization</p>
               </div>
-              <button class="btn small" id="setupNextBtn" type="button" aria-label="Show next setup image">→</button>
             </div>
 
             <div class="setup-media" id="setupMedia" role="img" aria-label="Treatment setup image placeholder">
@@ -1720,18 +1755,18 @@
       "gu:prostate": {
         "IMRT/VMAT": {
           position: "images/genitourinary/prostate/position.png",
-          machine: "images/genitourinary/prostate/machine.jpg",
-          immobilizer: "images/genitourinary/prostate/immobilizer.jpg"
+          machine: "images/genitourinary/prostate/machine.png",
+          immobilizer: "images/genitourinary/prostate/immobilizer.png"
         },
         "3D conformal radiation": {
           position: "images/genitourinary/prostate/position.png",
-          machine: "images/genitourinary/prostate/machine.jpg",
-          immobilizer: "images/genitourinary/prostate/immobilizer.jpg"
+          machine: "images/genitourinary/prostate/machine.png",
+          immobilizer: "images/genitourinary/prostate/immobilizer.png"
         },
         "SBRT/SABR": {
           position: "images/genitourinary/prostate/position.png",
-          machine: "images/genitourinary/prostate/machine.jpg",
-          immobilizer: "images/genitourinary/prostate/immobilizer.jpg"
+          machine: "images/genitourinary/prostate/machine.png",
+          immobilizer: "images/genitourinary/prostate/immobilizer.png"
         }
       }
     };
@@ -1926,10 +1961,18 @@
       return "";
     }
 
+    function setupCarouselControlsHtml() {
+      return `
+        <button class="setup-carousel-btn prev" type="button" data-setup-nav="prev" aria-label="Previous setup image">‹</button>
+        <button class="setup-carousel-btn next" type="button" data-setup-nav="next" aria-label="Next setup image">›</button>
+      `;
+    }
+
     function renderSetupPlaceholder(icon, title, text) {
       if (!$('setupMedia')) return;
       $('setupMedia').classList.remove('has-image');
       $('setupMedia').innerHTML = `
+        ${setupCarouselControlsHtml()}
         <div class="setup-placeholder-icon" id="setupIcon">${icon}</div>
         <div>
           <strong id="setupImageTitle">${title}</strong>
@@ -1961,11 +2004,12 @@
         if (imagePath) {
           $("setupMedia").classList.add("has-image");
           $("setupMedia").innerHTML = `
+            ${setupCarouselControlsHtml()}
             <img
               src="${imagePath}"
               alt="${site.name} ${title.toLowerCase()} preview"
               class="setup-preview-img"
-              onerror="this.closest('.setup-media').classList.remove('has-image'); this.closest('.setup-media').innerHTML = '<div class=&quot;setup-placeholder-icon&quot;>⚠️</div><div><strong>Image not found</strong><p>Check that the file path exists: ${imagePath}</p></div>';"
+              onerror="this.closest('.setup-media').classList.remove('has-image'); this.closest('.setup-media').innerHTML = '${setupCarouselControlsHtml().replace(/`/g, '\`').replace(/'/g, '&apos;')}<div class=&quot;setup-placeholder-icon&quot;>⚠️</div><div><strong>Image not found</strong><p>Check that the file path exists: ${imagePath}</p></div>';"
             />
           `;
         } else {
@@ -2102,11 +2146,18 @@
         updateTimeline();
       }
     }));
-    $("setupNextBtn").addEventListener("click", () => {
+    function navigateSetupSlide(direction) {
       const technique = $("technique").value;
       const setup = setupSlidesByTechnique[technique] || setupSlidesByTechnique["IMRT/VMAT"];
-      setupSlideIndex = (setupSlideIndex + 1) % setup.slides.length;
+      const totalSlides = setup.slides.length;
+      setupSlideIndex = (setupSlideIndex + direction + totalSlides) % totalSlides;
       updateSetupCard();
+    }
+
+    $("setupMedia").addEventListener("click", (event) => {
+      const navButton = event.target.closest("[data-setup-nav]");
+      if (!navButton) return;
+      navigateSetupSlide(navButton.dataset.setupNav === "prev" ? -1 : 1);
     });
     $("searchInput").addEventListener("input", e => renderSystems(e.target.value));
     $("embedManagerBtn").addEventListener("click", openEmbedModal);
