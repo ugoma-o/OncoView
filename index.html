@@ -600,33 +600,36 @@
     }
 
     .treatment-course-card {
-      min-height: 360px;
-      display: grid;
-      align-content: start;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
       gap: 14px;
     }
 
     .course-flow {
       display: grid;
-      gap: 10px;
-      margin-top: 4px;
+      grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr);
+      gap: 8px;
+      align-items: stretch;
+      margin-top: 2px;
     }
 
     .course-step {
       display: grid;
-      grid-template-columns: 42px 1fr;
-      gap: 12px;
+      grid-template-rows: auto auto;
+      gap: 9px;
       align-items: start;
       border: 1px solid var(--line);
       border-radius: 18px;
       background: rgba(248, 251, 252, 0.88);
-      padding: 13px;
+      padding: 12px;
+      min-width: 0;
     }
 
     .course-step-marker {
-      width: 42px;
-      height: 42px;
-      border-radius: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, var(--primary-soft), rgba(139, 92, 246, 0.16));
@@ -639,20 +642,36 @@
       display: block;
       margin-bottom: 3px;
       letter-spacing: -0.02em;
+      font-size: 0.95rem;
     }
 
     .course-step p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
     }
 
     .course-connector {
-      width: 2px;
-      height: 14px;
+      width: 100%;
+      height: 2px;
       background: var(--line);
-      margin-left: 21px;
       border-radius: 999px;
+      align-self: center;
+      position: relative;
+    }
+
+    .course-connector::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid var(--line);
+      border-right: 2px solid var(--line);
+      transform: translateY(-50%) rotate(45deg);
+      border-radius: 1px;
     }
 
     .course-summary {
@@ -661,7 +680,8 @@
       background: linear-gradient(135deg, var(--primary-soft), rgba(139, 92, 246, 0.12));
       border: 1px solid rgba(31, 111, 120, 0.22);
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
+      margin-top: auto;
     }
 
     .course-summary b {
@@ -1057,6 +1077,16 @@
       .workspace > .main-column > .setup-card { order: 2; }
       .workspace > .side-column { order: 3; }
       .workspace > .main-column > .clinician-notes-wide { order: 4; margin-top: 0; }
+      .course-flow { grid-template-columns: 1fr; }
+      .course-connector { width: 2px; height: 14px; justify-self: start; margin-left: 17px; }
+      .course-connector::after {
+        right: auto;
+        left: 50%;
+        top: auto;
+        bottom: -1px;
+        transform: translateX(-50%) rotate(135deg);
+      }
+      .treatment-course-card { height: auto !important; min-height: 0; }
     }
 
     @media (max-width: 860px) {
@@ -2236,6 +2266,7 @@
         `;
         $("doseTags").innerHTML = "";
         updateTreatmentCourse();
+        requestAnimationFrame(syncTreatmentCourseHeight);
         return;
       }
 
@@ -2254,6 +2285,7 @@
       descriptors.push(technique);
       $("doseTags").innerHTML = descriptors.map(x => `<span class="tag">${x}</span>`).join("");
       updateTreatmentCourse();
+      requestAnimationFrame(syncTreatmentCourseHeight);
     }
 
     function renderEmbedEditors() {
@@ -2317,6 +2349,23 @@
     }
 
 
+    function syncTreatmentCourseHeight() {
+      const courseCard = document.querySelector(".treatment-course-card");
+      const viewerCard = document.querySelector(".viewer-card");
+      const educationCard = document.querySelector(".education-card");
+      const sideColumn = document.querySelector(".side-column");
+      const isStacked = window.matchMedia("(max-width: 980px)").matches;
+
+      if (!courseCard || !viewerCard || !educationCard || !sideColumn || isStacked) {
+        if (courseCard) courseCard.style.height = "";
+        return;
+      }
+
+      const sideGap = parseFloat(getComputedStyle(sideColumn).gap) || 18;
+      const targetHeight = viewerCard.offsetHeight - educationCard.offsetHeight - sideGap;
+      courseCard.style.height = `${Math.max(220, targetHeight)}px`;
+    }
+
     function updateAll() {
       renderSystems($("searchInput").value);
       renderSites();
@@ -2324,6 +2373,7 @@
       updateViewer();
       updateDose();
       updateSetupCard();
+      requestAnimationFrame(syncTreatmentCourseHeight);
     }
 
     ["totalDose", "fractions", "treatmentsPerWeek", "technique"].forEach(id => $(id).addEventListener("input", () => {
@@ -2358,7 +2408,7 @@
       state.forceEmbedOnMobile = true;
       updateViewer();
     });
-    window.addEventListener("resize", updateViewer);
+    window.addEventListener("resize", () => { updateViewer(); requestAnimationFrame(syncTreatmentCourseHeight); });
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
 
