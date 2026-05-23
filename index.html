@@ -867,6 +867,30 @@
       min-height: 140px;
     }
 
+    .note-template-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: end;
+    }
+
+    .note-template-row .field {
+      margin: 0;
+    }
+
+    .note-template-help {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin: -4px 0 12px;
+    }
+
+    @media (max-width: 560px) {
+      .note-template-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .dose-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1609,11 +1633,18 @@
         <div class="panel-heading">
           <div>
             <h3>Clinician notes</h3>
-            <p>Optional talking points</p>
+          </div>
+        </div>
+        <div class="note-template-row">
+          <div class="field">
+            <label class="sr-only" for="noteTemplateSelect">Note template</label>
+            <select id="noteTemplateSelect">
+              <option value="">Choose a template...</option>
+            </select>
           </div>
         </div>
         <div class="field">
-          <label for="clinicianNotes">Add custom note for this visit</label>
+          <label class="sr-only" for="clinicianNotes">Clinician notes</label>
           <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
         </div>
         <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
@@ -2366,6 +2397,54 @@
     }
 
 
+    const clinicianNoteTemplates = [
+      {
+        id: "skin-aquaphor",
+        label: "Skin irritation: Aquaphor ointment",
+        text: "Skin irritation: Apply a thin layer of Aquaphor Healing Ointment or an institution-approved moisturizer to dry or irritated skin as directed. Avoid applying thick ointment immediately before treatment unless the radiation team says it is okay. Product information: https://www.aquaphorus.com/"
+      },
+      {
+        id: "fatigue",
+        label: "Fatigue: activity and pacing",
+        text: "Fatigue: This is common and is usually temporary. Encourage light activity as tolerated, hydration, regular sleep, and planned rest periods. Call the clinic if fatigue is sudden, severe, or associated with new concerning symptoms."
+      },
+      {
+        id: "urinary",
+        label: "Urinary irritation",
+        text: "Urinary irritation: Frequency, urgency, weaker stream, nocturia, or mild burning can occur depending on the treatment site. Encourage hydration and avoidance of bladder irritants if symptoms worsen. Report fever, inability to urinate, heavy bleeding, or severe pain."
+      },
+      {
+        id: "bowel",
+        label: "Bowel changes",
+        text: "Bowel changes: Loose stool, urgency, gas, or cramping can occur with pelvic or abdominal treatment and are often temporary. Maintain hydration and follow clinic guidance for diet or medications. Report severe diarrhea, dehydration, persistent bleeding, or uncontrolled pain."
+      },
+      {
+        id: "mouth-throat",
+        label: "Mouth or throat irritation",
+        text: "Mouth/throat irritation: Soreness, taste changes, dry mouth, or swallowing discomfort can occur with head and neck treatment. Use clinic-recommended rinses, soft foods, hydration, and pain-control guidance. Report poor intake, weight loss, fever, or inability to swallow."
+      }
+    ];
+
+    function populateClinicianNoteTemplates() {
+      const select = $("noteTemplateSelect");
+      if (!select) return;
+      select.innerHTML = `<option value="">Choose a template...</option>` + clinicianNoteTemplates.map(template => `
+        <option value="${template.id}">${template.label}</option>
+      `).join("");
+    }
+
+    function insertClinicianNoteTemplate() {
+      const select = $("noteTemplateSelect");
+      const textarea = $("clinicianNotes");
+      if (!select || !textarea || !select.value) return;
+      const template = clinicianNoteTemplates.find(item => item.id === select.value);
+      if (!template) return;
+      const current = textarea.value.trim();
+      textarea.value = current ? `${current}\n\n${template.text}` : template.text;
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+
     function syncTreatmentCourseHeight() {
       const courseCard = document.querySelector(".treatment-course-card");
       const viewerCard = document.querySelector(".viewer-card");
@@ -2421,6 +2500,7 @@
     $("saveLinksBtn").addEventListener("click", saveEmbedLinks);
     $("clearLinksBtn").addEventListener("click", clearEmbedLinks);
     $("openModelBtn").addEventListener("click", openCurrentModel);
+    if ($("noteTemplateSelect")) $("noteTemplateSelect").addEventListener("change", e => { if (e.target.value) insertClinicianNoteTemplate(); });
     $("mobileTryEmbedBtn").addEventListener("click", () => {
       state.forceEmbedOnMobile = true;
       updateViewer();
@@ -2429,6 +2509,7 @@
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
 
+    populateClinicianNoteTemplates();
     updateAll();
   </script>
 </body>
