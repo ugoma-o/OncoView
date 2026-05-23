@@ -298,7 +298,7 @@
 
     .workspace > .main-column > .viewer-card,
     .workspace > .main-column > .setup-card,
-    .workspace > .main-column > .clinician-notes-wide {
+    .workspace > .side-column > .clinician-notes-wide {
       width: 100%;
       min-width: 0;
     }
@@ -1089,7 +1089,7 @@
       .workspace > .main-column > .viewer-card { order: 1; }
       .workspace > .main-column > .setup-card { order: 2; }
       .workspace > .side-column { order: 3; }
-      .workspace > .main-column > .clinician-notes-wide { order: 4; margin-top: 0; }
+      .workspace > .side-column > .clinician-notes-wide { order: 4; margin-top: 0; }
       .course-flow { grid-template-columns: 1fr; }
       .course-connector { width: 2px; height: 14px; justify-self: start; margin-left: 17px; }
       .course-connector::after {
@@ -1531,19 +1531,6 @@
           </section>
 
 
-      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
-        <div class="panel-heading">
-          <div>
-            <h3>Clinician notes</h3>
-            <p>Optional talking points</p>
-          </div>
-        </div>
-        <div class="field">
-          <label for="clinicianNotes">Add custom note for this visit</label>
-          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
-        </div>
-        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
-      </section>
         </div>
 
         <aside class="side-column" aria-label="Treatment explanation and symptom timeline">
@@ -1617,6 +1604,21 @@
             </div>
             <div class="timeline" id="timeline"></div>
           </section>
+
+      <section class="side-card clinician-notes-wide" aria-label="Clinician notes">
+        <div class="panel-heading">
+          <div>
+            <h3>Clinician notes</h3>
+            <p>Optional talking points</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="clinicianNotes">Add custom note for this visit</label>
+          <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
+        </div>
+        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
+      </section>
+
         </aside>
       </section>
 
