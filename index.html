@@ -346,40 +346,148 @@
       max-width: 420px;
     }
 
-    .system-grid {
+    .organ-tabs-wrap {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 10px;
+      grid-template-columns: 30px minmax(0, 1fr) 30px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .organ-scroll-btn {
+      width: 30px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--line);
+      color: var(--primary-dark);
+      box-shadow: 0 8px 18px rgba(34, 55, 66, 0.08);
+      transition: transform 0.16s ease, opacity 0.16s ease, box-shadow 0.16s ease;
+      flex: 0 0 30px;
+    }
+
+    .organ-scroll-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(34, 55, 66, 0.12);
+    }
+
+    .organ-scroll-btn[disabled] {
+      opacity: 0.38;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .organ-scroll-btn span {
+      width: 0;
+      height: 0;
+      display: block;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+    }
+
+    .organ-scroll-btn.prev span { border-right: 8px solid currentColor; }
+    .organ-scroll-btn.next span { border-left: 8px solid currentColor; }
+
+    .system-grid {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 2px 2px 8px;
+      scrollbar-width: thin;
+      scroll-snap-type: x proximity;
+      min-width: 0;
     }
 
     .system-card {
-      width: 100%;
+      width: auto;
+      min-width: 0;
+      flex: 0 0 auto;
       text-align: left;
       display: grid;
-      grid-template-columns: 40px 1fr auto;
-      gap: 10px;
+      grid-template-columns: 32px auto;
+      gap: 6px;
       align-items: center;
-      padding: 10px;
-      border-radius: 18px;
-      background: #fff;
+      padding: 7px 9px 7px 7px;
+      border-radius: 15px 15px 10px 10px;
+      background: rgba(255, 255, 255, 0.62);
       color: var(--ink);
       border: 1px solid var(--line);
+      border-bottom-width: 3px;
       transition: 0.16s ease;
+      scroll-snap-align: start;
     }
 
     .system-card:hover { transform: translateY(-1px); border-color: rgba(31, 111, 120, 0.45); }
-    .system-card.active { background: var(--primary-soft); border-color: rgba(31, 111, 120, 0.45); }
+    .system-card.active { background: var(--primary-soft); border-color: rgba(31, 111, 120, 0.58); border-bottom-color: var(--primary); }
+
+    .system-card .system-copy { min-width: 0; }
+    .system-card .system-copy strong {
+      white-space: nowrap;
+      font-size: 0.84rem;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .system-card .system-subtitle, .system-card .system-arrow { display: none; }
+
+    .organ-selector-panel.searching .organ-tabs-wrap {
+      display: block;
+    }
+
+    .organ-selector-panel.searching .organ-scroll-btn {
+      display: none;
+    }
+
+    .organ-selector-panel.searching .system-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      overflow-x: visible;
+      padding: 0;
+      scroll-snap-type: none;
+    }
+
+    .organ-selector-panel.searching .system-card {
+      width: 100%;
+      min-width: 0;
+      flex: initial;
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-bottom-width: 1px;
+      scroll-snap-align: none;
+    }
+
+    .organ-selector-panel.searching .system-card.active { background: var(--primary-soft); border-color: rgba(31, 111, 120, 0.45); }
+    .organ-selector-panel.searching .system-card .system-copy strong {
+      font-size: 0.96rem;
+      line-height: 1.2;
+    }
+    .organ-selector-panel.searching .system-card .system-subtitle { display: block; }
+    .organ-selector-panel.searching .system-card .system-arrow { display: inline; }
 
     .icon-bubble {
-      width: 40px;
-      height: 40px;
-      border-radius: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
       background: #f1f5f7;
       overflow: hidden;
       padding: 0;
-      flex: 0 0 40px;
+      flex: 0 0 32px;
+    }
+
+    .organ-selector-panel.searching .icon-bubble {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      flex-basis: 40px;
     }
 
     .system-card.active .icon-bubble { background: #fff; }
@@ -1447,7 +1555,11 @@
             <label class="sr-only" for="searchInput">Search cancer sites</label>
             <input id="searchInput" type="search" placeholder="Search CNS, prostate, lung..." autocomplete="off" />
           </div>
-          <div class="system-grid" id="systemGrid"></div>
+          <div class="organ-tabs-wrap" aria-label="Organ system tabs">
+            <button class="organ-scroll-btn prev" id="organScrollPrev" type="button" aria-label="Scroll organ systems left"><span aria-hidden="true"></span></button>
+            <div class="system-grid" id="systemGrid"></div>
+            <button class="organ-scroll-btn next" id="organScrollNext" type="button" aria-label="Scroll organ systems right"><span aria-hidden="true"></span></button>
+          </div>
         </section>
 
       <section class="workspace" aria-label="Cancer education workspace">
@@ -1882,6 +1994,58 @@
     const activeSite = () => activeSystem().sites.find(site => site.id === state.siteId) || activeSystem().sites[0];
     const embedKey = (systemId, siteId) => `${systemId}:${siteId}`;
 
+    function setDoseForActiveSite() {
+      const site = activeSite();
+      if (!site?.dose) return;
+      if ($("totalDose")) $("totalDose").value = site.dose[0];
+      if ($("fractions")) $("fractions").value = site.dose[1];
+    }
+
+    function getRouteHash() {
+      return `#${state.systemId}/${state.siteId}`;
+    }
+
+    function updateRouteHash({ replace = false } = {}) {
+      const nextHash = getRouteHash();
+      if (window.location.hash === nextHash) return;
+      if (replace) history.replaceState(null, "", nextHash);
+      else history.pushState(null, "", nextHash);
+    }
+
+    function loadStateFromRouteHash() {
+      const rawHash = window.location.hash.replace(/^#/, "").trim();
+      if (!rawHash) return false;
+
+      const [systemId, siteId] = rawHash.split("/").map(part => decodeURIComponent(part || ""));
+      const system = systems.find(item => item.id === systemId);
+      if (!system) return false;
+
+      state.systemId = system.id;
+      const matchedSite = system.sites.find(site => site.id === siteId);
+      state.siteId = matchedSite ? matchedSite.id : system.sites[0].id;
+      setDoseForActiveSite();
+      return true;
+    }
+
+    function selectSystem(systemId) {
+      const system = systems.find(item => item.id === systemId);
+      if (!system) return;
+      state.systemId = system.id;
+      state.siteId = system.sites[0].id;
+      setDoseForActiveSite();
+      updateRouteHash();
+      updateAll();
+    }
+
+    function selectSite(siteId) {
+      const site = activeSystem().sites.find(item => item.id === siteId);
+      if (!site) return;
+      state.siteId = site.id;
+      setDoseForActiveSite();
+      updateRouteHash();
+      updateAll();
+    }
+
 
     function renderSystems(filter = "") {
       const query = filter.trim().toLowerCase();
@@ -1890,21 +2054,44 @@
         return haystack.includes(query);
       });
 
+      const organPanel = document.querySelector(".organ-selector-panel");
+      if (organPanel) organPanel.classList.toggle("searching", Boolean(query));
+
       $("systemGrid").innerHTML = filtered.map(system => `
         <button class="system-card ${system.id === state.systemId ? "active" : ""}" type="button" data-system-id="${system.id}">
           <span class="icon-bubble" aria-hidden="true"><img src="${system.icon}" alt="" class="system-icon-img" /></span>
-          <span><strong>${system.name}</strong><span>${system.subtitle}</span></span>
-          <span aria-hidden="true">›</span>
+          <span class="system-copy"><strong>${system.name}</strong><span class="system-subtitle">${system.subtitle}</span></span>
+          <span class="system-arrow" aria-hidden="true">›</span>
         </button>
       `).join("");
 
       document.querySelectorAll("[data-system-id]").forEach(btn => {
         btn.addEventListener("click", () => {
-          state.systemId = btn.dataset.systemId;
-          state.siteId = activeSystem().sites[0].id;
-          updateAll();
+          selectSystem(btn.dataset.systemId);
         });
       });
+      requestAnimationFrame(updateOrganScrollButtons);
+    }
+
+    function updateOrganScrollButtons() {
+      const grid = $("systemGrid");
+      const prev = $("organScrollPrev");
+      const next = $("organScrollNext");
+      const organPanel = document.querySelector(".organ-selector-panel");
+      if (!grid || !prev || !next || !organPanel) return;
+
+      const searching = organPanel.classList.contains("searching");
+      const canScroll = !searching && grid.scrollWidth > grid.clientWidth + 2;
+      prev.disabled = !canScroll || grid.scrollLeft <= 1;
+      next.disabled = !canScroll || grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 2;
+    }
+
+    function scrollOrganTabs(direction) {
+      const grid = $("systemGrid");
+      if (!grid) return;
+      const distance = Math.max(180, Math.round(grid.clientWidth * 0.55));
+      grid.scrollBy({ left: direction * distance, behavior: "smooth" });
+      setTimeout(updateOrganScrollButtons, 260);
     }
 
     function renderSites() {
@@ -1919,13 +2106,7 @@
 
       document.querySelectorAll("[data-site-id]").forEach(btn => {
         btn.addEventListener("click", () => {
-          state.siteId = btn.dataset.siteId;
-          const site = activeSite();
-          if (site.dose) {
-            $("totalDose").value = site.dose[0];
-            $("fractions").value = site.dose[1];
-          }
-          updateAll();
+          selectSite(btn.dataset.siteId);
         });
       });
     }
@@ -2471,7 +2652,13 @@
       if (!navButton) return;
       navigateSetupSlide(navButton.dataset.setupNav === "prev" ? -1 : 1);
     });
-    $("searchInput").addEventListener("input", e => renderSystems(e.target.value));
+    $("searchInput").addEventListener("input", e => {
+      renderSystems(e.target.value);
+      requestAnimationFrame(updateOrganScrollButtons);
+    });
+    if ($("organScrollPrev")) $("organScrollPrev").addEventListener("click", () => scrollOrganTabs(-1));
+    if ($("organScrollNext")) $("organScrollNext").addEventListener("click", () => scrollOrganTabs(1));
+    if ($("systemGrid")) $("systemGrid").addEventListener("scroll", updateOrganScrollButtons, { passive: true });
     $("embedManagerBtn").addEventListener("click", openEmbedModal);
     $("emptyManageBtn").addEventListener("click", openEmbedModal);
     $("closeModalBtn").addEventListener("click", closeEmbedModal);
@@ -2479,11 +2666,22 @@
     $("clearLinksBtn").addEventListener("click", clearEmbedLinks);
     $("openModelBtn").addEventListener("click", openCurrentModel);
     if ($("noteTemplateSelect")) $("noteTemplateSelect").addEventListener("change", e => { if (e.target.value) insertClinicianNoteTemplate(); });
-    window.addEventListener("resize", () => { updateViewer(); requestAnimationFrame(syncTreatmentCourseHeight); });
+    window.addEventListener("resize", () => {
+      updateViewer();
+      requestAnimationFrame(syncTreatmentCourseHeight);
+      requestAnimationFrame(updateOrganScrollButtons);
+    });
+    window.addEventListener("hashchange", () => {
+      if (loadStateFromRouteHash()) updateAll();
+    });
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
 
     populateClinicianNoteTemplates();
+    if (!loadStateFromRouteHash()) {
+      setDoseForActiveSite();
+      updateRouteHash({ replace: true });
+    }
     updateAll();
   </script>
 </body>
