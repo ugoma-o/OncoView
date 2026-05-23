@@ -2290,7 +2290,7 @@
       if (valid) {
         $('courseTreatmentText').textContent = isBrachytherapy
           ? `Radiation is delivered with applicators or sources placed near the target.`
-          : `Radiation is delivered according to the finalized plan. The beam is not seen or felt.`;
+          : `Each session uses the completed treatment plan to accurately position and deliver radiation to the target area.`;
         $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to ${site.name.toLowerCase()} using ${technique}.`;
       } else {
         $('courseTreatmentText').textContent = `Treatment delivery follows the finalized plan and technique.`;
