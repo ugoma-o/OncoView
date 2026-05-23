@@ -1573,7 +1573,7 @@
                 <div class="course-step-marker" aria-hidden="true">1</div>
                 <div>
                   <strong>CT simulation</strong>
-                  <p id="courseSimText">A planning scan maps the anatomy and confirms reproducible positioning.</p>
+                  <p id="courseSimText">Planning maps the target, nearby organs, and setup position.</p>
                 </div>
               </div>
               <div class="course-connector" aria-hidden="true"></div>
@@ -1581,7 +1581,7 @@
                 <div class="course-step-marker" aria-hidden="true">2</div>
                 <div>
                   <strong>Treatment sessions</strong>
-                  <p id="courseTreatmentText">Treatments are delivered on the selected schedule. Patients do not see or feel the beam.</p>
+                  <p id="courseTreatmentText">Treatment delivery follows the finalized plan and technique.</p>
                 </div>
               </div>
               <div class="course-connector" aria-hidden="true"></div>
@@ -1589,11 +1589,11 @@
                 <div class="course-step-marker" aria-hidden="true">3</div>
                 <div>
                   <strong>Follow-up</strong>
-                  <p id="courseFollowText">The team checks recovery, side effects, and the next surveillance plan.</p>
+                  <p id="courseFollowText">Recovery, side effects, and surveillance are reviewed.</p>
                 </div>
               </div>
             </div>
-            <div class="course-summary" id="courseSummary"><b>Course overview:</b> Select a site and dose to show the expected treatment path.</div>
+            <div class="course-summary" id="courseSummary"><b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to the selected site.</div>
           </section>
 
           <section class="side-card symptom-card">
@@ -2238,18 +2238,21 @@
       const valid = total > 0 && fractions > 0 && perWeek > 0;
       const fmt = (value) => Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '');
 
-      $('courseSimText').textContent = `${site.name}: CT simulation maps the treatment area, nearby organs, and the setup position.`;
+      $('courseSimText').textContent = `Planning maps the target, nearby organs, and setup position.`;
+
+      const isBrachytherapy = technique === 'Brachytherapy';
 
       if (valid) {
-        const weeks = fractions / perWeek;
-        $('courseTreatmentText').textContent = `${fmt(fractions)} treatment${fractions === 1 ? '' : 's'} over about ${weeks.toFixed(1).replace(/\.0$/, '')} week${weeks === 1 ? '' : 's'} using ${technique}. The beam is not seen or felt.`;
-        $('courseSummary').innerHTML = `<b>Course overview:</b> ${fmt(total)} Gy in ${fmt(fractions)} treatment${fractions === 1 ? '' : 's'} for ${system.name.toLowerCase()} / ${site.name.toLowerCase()}, followed by recovery monitoring and surveillance.`;
+        $('courseTreatmentText').textContent = isBrachytherapy
+          ? `Radiation is delivered with applicators or sources placed near the target.`
+          : `Radiation is delivered according to the finalized plan. The beam is not seen or felt.`;
+        $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to ${site.name.toLowerCase()} using ${technique}.`;
       } else {
-        $('courseTreatmentText').textContent = `Treatment sessions are delivered according to the finalized plan. Patients do not see or feel the beam.`;
-        $('courseSummary').innerHTML = `<b>Course overview:</b> Enter the dose and number of treatments to show the expected schedule.`;
+        $('courseTreatmentText').textContent = `Treatment delivery follows the finalized plan and technique.`;
+        $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to the selected site.`;
       }
 
-      $('courseFollowText').textContent = `Follow-up reviews symptom recovery, late-effect monitoring, and site-specific surveillance or imaging as appropriate.`;
+      $('courseFollowText').textContent = `Recovery, side effects, and surveillance are reviewed after treatment.`;
     }
 
     function updateDose() {
