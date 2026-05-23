@@ -1470,16 +1470,6 @@
               </div>
             </div>
             <iframe class="model-frame" id="modelFrame" title="Embedded 3D anatomy model" allow="fullscreen; xr-spatial-tracking; accelerometer; gyroscope; autoplay; encrypted-media; clipboard-read; clipboard-write" allowfullscreen loading="eager" referrerpolicy="strict-origin-when-cross-origin" scrolling="no" hidden></iframe>
-            <div class="mobile-viewer-launch" id="mobileViewerLaunch" hidden>
-              <div class="mobile-viewer-card">
-                <h3>BioDigital embedded viewer fallback</h3>
-                <p>The embedded viewer is set to load on mobile. If your browser blocks BioDigital login inside the iframe, open the model directly as a fallback.</p>
-                <div class="mobile-viewer-actions">
-                  <a class="btn primary" id="mobileOpenModelLink" href="#" target="_blank" rel="noopener noreferrer">Open full-screen model</a>
-                  <button class="btn" id="mobileTryEmbedBtn" type="button">Try embedded viewer</button>
-                </div>
-              </div>
-            </div>
           </div>
           <div class="content-section">
             <div class="panel-heading">
@@ -1884,8 +1874,7 @@
     const state = {
       systemId: systems[0].id,
       siteId: systems[0].sites[0].id,
-      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks },
-      forceEmbedOnMobile: true
+      embedLinks: { ...defaultEmbedLinks, ...savedEmbedLinks }
     };
 
     const $ = (id) => document.getElementById(id);
@@ -1893,7 +1882,6 @@
     const activeSite = () => activeSystem().sites.find(site => site.id === state.siteId) || activeSystem().sites[0];
     const embedKey = (systemId, siteId) => `${systemId}:${siteId}`;
 
-    const isMobileLike = () => window.matchMedia("(max-width: 860px)").matches || (navigator.maxTouchPoints > 0 && window.matchMedia("(max-width: 1024px)").matches);
 
     function renderSystems(filter = "") {
       const query = filter.trim().toLowerCase();
@@ -1914,7 +1902,6 @@
         btn.addEventListener("click", () => {
           state.systemId = btn.dataset.systemId;
           state.siteId = activeSystem().sites[0].id;
-          state.forceEmbedOnMobile = true;
           updateAll();
         });
       });
@@ -1933,7 +1920,6 @@
       document.querySelectorAll("[data-site-id]").forEach(btn => {
         btn.addEventListener("click", () => {
           state.siteId = btn.dataset.siteId;
-          state.forceEmbedOnMobile = true;
           const site = activeSite();
           if (site.dose) {
             $("totalDose").value = site.dose[0];
@@ -1960,18 +1946,11 @@
       const url = sanitizeUrl(state.embedLinks[key]);
       const frame = $("modelFrame");
       const empty = $("emptyViewer");
-      const mobileLaunch = $("mobileViewerLaunch");
-      const mobileOpenModelLink = $("mobileOpenModelLink");
-
       $("emptyIcon").innerHTML = `<img src="${system.icon}" alt="" class="empty-system-icon" />`;
       $("emptyTitle").textContent = `${site.name} model not linked yet`;
       $("emptyText").textContent = "Paste a published BioDigital iframe src for this disease site to display the interactive 3D model here.";
 
-      mobileLaunch.classList.remove("show");
-      mobileLaunch.hidden = true;
-
       if (url) {
-        mobileOpenModelLink.href = url;
         empty.style.display = "none";
 
         frame.src = url;
@@ -1979,7 +1958,6 @@
       } else {
         frame.hidden = true;
         frame.removeAttribute("src");
-        mobileOpenModelLink.href = "#";
         empty.style.display = "grid";
       }
     }
@@ -2501,10 +2479,6 @@
     $("clearLinksBtn").addEventListener("click", clearEmbedLinks);
     $("openModelBtn").addEventListener("click", openCurrentModel);
     if ($("noteTemplateSelect")) $("noteTemplateSelect").addEventListener("change", e => { if (e.target.value) insertClinicianNoteTemplate(); });
-    $("mobileTryEmbedBtn").addEventListener("click", () => {
-      state.forceEmbedOnMobile = true;
-      updateViewer();
-    });
     window.addEventListener("resize", () => { updateViewer(); requestAnimationFrame(syncTreatmentCourseHeight); });
     $("embedModal").addEventListener("click", e => { if (e.target.id === "embedModal") closeEmbedModal(); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") closeEmbedModal(); });
