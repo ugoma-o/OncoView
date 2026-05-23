@@ -616,7 +616,7 @@
 
     .course-step {
       display: grid;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto 1fr;
       gap: 9px;
       align-items: start;
       border: 1px solid var(--line);
@@ -626,23 +626,32 @@
       min-width: 0;
     }
 
+    .course-step-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
     .course-step-marker {
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 13px;
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, var(--primary-soft), rgba(139, 92, 246, 0.16));
       color: var(--primary-dark);
       font-weight: 900;
       border: 1px solid rgba(31, 111, 120, 0.22);
+      flex: 0 0 32px;
     }
 
     .course-step strong {
       display: block;
-      margin-bottom: 3px;
       letter-spacing: -0.02em;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      line-height: 1.15;
+      min-width: 0;
     }
 
     .course-step p {
@@ -1570,27 +1579,27 @@
             </div>
             <div class="course-flow">
               <div class="course-step">
-                <div class="course-step-marker" aria-hidden="true">1</div>
-                <div>
+                <div class="course-step-head">
+                  <div class="course-step-marker" aria-hidden="true">1</div>
                   <strong>CT simulation</strong>
-                  <p id="courseSimText">Planning maps the target, nearby organs, and setup position.</p>
                 </div>
+                <p id="courseSimText">Planning maps the target, nearby organs, and setup position.</p>
               </div>
               <div class="course-connector" aria-hidden="true"></div>
               <div class="course-step">
-                <div class="course-step-marker" aria-hidden="true">2</div>
-                <div>
+                <div class="course-step-head">
+                  <div class="course-step-marker" aria-hidden="true">2</div>
                   <strong>Treatment sessions</strong>
-                  <p id="courseTreatmentText">Treatment delivery follows the finalized plan and technique.</p>
                 </div>
+                <p id="courseTreatmentText">Treatment delivery follows the finalized plan and technique.</p>
               </div>
               <div class="course-connector" aria-hidden="true"></div>
               <div class="course-step">
-                <div class="course-step-marker" aria-hidden="true">3</div>
-                <div>
+                <div class="course-step-head">
+                  <div class="course-step-marker" aria-hidden="true">3</div>
                   <strong>Follow-up</strong>
-                  <p id="courseFollowText">Recovery, side effects, and surveillance are reviewed.</p>
                 </div>
+                <p id="courseFollowText">Recovery, side effects, and surveillance are reviewed.</p>
               </div>
             </div>
             <div class="course-summary" id="courseSummary"><b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to the selected site.</div>
