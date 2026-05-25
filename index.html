@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OncoViewer | Radiation Oncology Patient Education</title>
+  <title>OncoGuide 3D | Radiation Oncology Patient Education</title>
   <meta name="description" content="A clinical tool for showing patients anatomy, tumor locations, radiation treatment concepts, dose schedules, and expected symptoms over time." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%232f7f88'/%3E%3Cstop offset='100%25' stop-color='%2374c4c9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='20' fill='url(%23g)'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='24' font-weight='900' fill='white' letter-spacing='-2'%3EOV%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%232f7f88'/%3E%3Cstop offset='100%25' stop-color='%2374c4c9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='20' fill='url(%23g)'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='24' font-weight='900' fill='white' letter-spacing='-2'%3EOG%3C/text%3E%3C/svg%3E" />
   <meta name="theme-color" content="#2f7f88" />
   <style>
     :root {
@@ -1508,10 +1508,10 @@
   <div class="app-shell">
     <header class="topbar" role="banner">
       <div class="topbar-inner">
-        <div class="brand" aria-label="OncoViewer">
-          <div class="brand-mark">OV</div>
+        <div class="brand" aria-label="OncoGuide 3D">
+          <div class="brand-mark">OG</div>
           <div>
-            <div class="brand-title">OncoViewer</div>
+            <div class="brand-title">OncoGuide 3D</div>
             <div class="brand-subtitle">Radiation oncology education workspace</div>
           </div>
         </div>
@@ -1548,7 +1548,7 @@
           <div class="panel-heading">
             <div>
               <h2>Organ systems</h2>
-         
+              <p>Tap to drill down</p>
             </div>
           </div>
           <div class="search-box">
@@ -1699,7 +1699,7 @@
                   <div class="course-step-marker" aria-hidden="true">1</div>
                   <strong>CT simulation</strong>
                 </div>
-                <p id="courseSimText">Planning maps the target, nearby organs, and setup position.</p>
+                <p id="courseSimText">A planning visit captures anatomy, target location, nearby organs, and the treatment position used each day.</p>
               </div>
               <div class="course-connector" aria-hidden="true"></div>
               <div class="course-step">
@@ -1707,7 +1707,7 @@
                   <div class="course-step-marker" aria-hidden="true">2</div>
                   <strong>Treatment sessions</strong>
                 </div>
-                <p id="courseTreatmentText">Treatment delivery follows the finalized plan and technique.</p>
+                <p id="courseTreatmentText">The approved plan guides treatment delivery using the selected technique, setup, and safety checks.</p>
               </div>
               <div class="course-connector" aria-hidden="true"></div>
               <div class="course-step">
@@ -1715,7 +1715,7 @@
                   <div class="course-step-marker" aria-hidden="true">3</div>
                   <strong>Follow-up</strong>
                 </div>
-                <p id="courseFollowText">Recovery, side effects, and surveillance are reviewed.</p>
+                <p id="courseFollowText">Follow-up checks healing, manages side effects, and reviews next imaging or surveillance steps.</p>
               </div>
             </div>
           </section>
@@ -1763,7 +1763,7 @@
 
     <footer class="footer">
       <div class="footer-inner">
-        <span>OncoViewer MVP. © 2026 Ugoma Onubogu. All rights reserved.</span>
+        <span>OncoGuide 3D MVP. © 2026 Ugoma Onubogu. All rights reserved.</span>
         <span>Static GitHub repository. No patient data is stored on a server.</span>
         <span>BioDigital models require published iframe links and appropriate account/domain permissions.</span>
       </div>
@@ -2430,32 +2430,21 @@
     }
 
     function updateTreatmentCourse() {
-      if (!$('courseSimText') || !$('courseTreatmentText') || !$('courseFollowText') || !$('courseSummary')) return;
+      if (!$('courseSimText') || !$('courseTreatmentText') || !$('courseFollowText')) return;
 
-      const system = activeSystem();
       const site = activeSite();
-      const total = parseFloat($('totalDose').value);
-      const fractions = parseFloat($('fractions').value);
-      const perWeek = parseFloat($('treatmentsPerWeek').value);
       const technique = $('technique').value;
-      const valid = total > 0 && fractions > 0 && perWeek > 0;
-      const fmt = (value) => Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, '');
-
-      $('courseSimText').textContent = `Planning maps the target, nearby organs, and setup position.`;
-
       const isBrachytherapy = technique === 'Brachytherapy';
 
-      if (valid) {
-        $('courseTreatmentText').textContent = isBrachytherapy
-          ? `Radiation is delivered with applicators or sources placed near the target.`
-          : `Each session uses the completed treatment plan to accurately position and deliver radiation to the target area.`;
-        $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to ${site.name.toLowerCase()} using ${technique}.`;
-      } else {
-        $('courseTreatmentText').textContent = `Treatment delivery follows the finalized plan and technique.`;
-        $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to the selected site.`;
-      }
+      $('courseSimText').textContent = isBrachytherapy
+        ? `A planning visit confirms anatomy, applicator approach, target region, and nearby organs that need protection.`
+        : `A planning visit captures anatomy, target location, nearby organs, and the treatment position used each day.`;
 
-      $('courseFollowText').textContent = `Recovery, side effects, and surveillance are reviewed after treatment.`;
+      $('courseTreatmentText').textContent = isBrachytherapy
+        ? `Treatment uses applicators or sources placed near the target, with imaging and safety checks guiding delivery.`
+        : `Each session uses the completed treatment plan to position the patient and deliver radiation to the target area.`;
+
+      $('courseFollowText').textContent = `Follow-up checks healing, manages side effects, and reviews the next surveillance or imaging steps.`;
     }
 
     function updateDose() {
