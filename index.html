@@ -279,6 +279,25 @@
       margin-bottom: 18px;
     }
 
+    .home-project-card {
+      margin-top: 18px;
+      padding: clamp(20px, 3vw, 30px);
+    }
+
+    .home-project-card h2 {
+      font-size: clamp(1.7rem, 3vw, 2.8rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      margin-bottom: 12px;
+    }
+
+    .home-project-card p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 86ch;
+      margin-bottom: 10px;
+    }
+
     .home-clinical-note {
       margin-top: 18px;
       width: 100%;
@@ -1226,10 +1245,7 @@
     }
 
     .team-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
-      gap: 22px;
-      align-items: start;
+      display: block;
     }
 
     .team-hero { padding: clamp(22px, 4vw, 38px); }
@@ -1241,7 +1257,11 @@
     }
     .team-hero p { color: var(--muted); font-size: 1.02rem; max-width: 72ch; }
 
-    .team-grid { display: grid; gap: 18px; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
     .team-card { padding: 20px; }
     .team-card h3 { margin-bottom: 8px; letter-spacing: -0.03em; }
     .team-card p { color: var(--muted); margin-bottom: 10px; }
@@ -1634,6 +1654,12 @@
           </div>
         </aside>
       </section>
+        <section class="side-card home-project-card" aria-label="About the project">
+          <div class="eyebrow">About the project</div>
+          <h2>OncoGuide 3D</h2>
+          <p>OncoGuide 3D is a clinician-facing radiation oncology education workspace designed to make treatment conversations more visual, structured, and easier for patients to understand.</p>
+          <p>The app combines organ-system navigation, embedded 3D anatomy, setup previews, dose explanation, treatment-course education, symptom timelines, and clinician note templates in a static, privacy-conscious web format.</p>
+        </section>
         <section class="notice home-clinical-note" aria-label="Clinical use note">
           <b>Clinical use note:</b> OncoGuide 3D is for education, shared decision support, and clinical demonstration workflows. It does not replace physician judgment, consent documentation, contouring, treatment planning, quality assurance, or institution-specific patient instructions.
         </section>
@@ -1853,12 +1879,6 @@
 
       <section class="app-page" id="teamPage" data-page="team">
         <section class="team-layout" aria-label="Team and project information">
-          <div class="team-hero side-card">
-            <div class="eyebrow">About the project</div>
-            <h2>OncoGuide 3D</h2>
-            <p>OncoGuide 3D is a clinician-facing radiation oncology education workspace designed to make treatment conversations more visual, structured, and easier for patients to understand.</p>
-            <p>The app combines organ-system navigation, embedded 3D anatomy, setup previews, dose explanation, treatment-course education, symptom timelines, and clinician note templates in a static, privacy-conscious web format.</p>
-          </div>
 
           <div class="team-grid">
             <article class="team-card side-card">
