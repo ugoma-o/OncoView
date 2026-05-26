@@ -279,6 +279,11 @@
       margin-bottom: 18px;
     }
 
+    .home-clinical-note {
+      margin-top: 18px;
+      width: 100%;
+    }
+
     .workspace {
       display: grid;
       grid-template-columns: minmax(520px, 830px) minmax(400px, 1fr);
@@ -1597,7 +1602,7 @@
         </div>
         <div class="nav-actions">
           <div class="page-tabs" role="navigation" aria-label="Primary sections">
-            <button class="page-tab active" type="button" data-page-tab="home">Home</button>
+            <button class="page-tab active" type="button" data-page-tab="home">About</button>
             <button class="page-tab" type="button" data-page-tab="workspace">Workspace</button>
             <button class="page-tab" type="button" data-page-tab="team">Team</button>
           </div>
@@ -1629,6 +1634,9 @@
           </div>
         </aside>
       </section>
+        <section class="notice home-clinical-note" aria-label="Clinical use note">
+          <b>Clinical use note:</b> OncoGuide 3D is for education, shared decision support, and clinical demonstration workflows. It does not replace physician judgment, consent documentation, contouring, treatment planning, quality assurance, or institution-specific patient instructions.
+        </section>
       </section>
 
       <section class="app-page" id="workspacePage" data-page="workspace">
@@ -1836,7 +1844,7 @@
           <label class="sr-only" for="clinicianNotes">Clinician notes</label>
           <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
         </div>
-        <div class="notice"><b>Clinical note:</b> This MVP is for education and shared decision support. It does not replace physician judgment, consent documentation, contouring, planning, or institution-specific patient instructions.</div>
+
       </section>
 
         </aside>
@@ -1867,11 +1875,6 @@
               <p>Future iterations may include expanded site-specific setup images, more validated symptom timelines, additional clinician note templates, and institution-specific patient instructions.</p>
             </article>
 
-            <article class="team-card side-card">
-              <span class="team-role">Clinical use note</span>
-              <h3>Education, not treatment planning</h3>
-              <p>OncoGuide 3D does not replace physician judgment, consent documentation, contouring, planning, quality assurance, or institution-specific clinical workflows.</p>
-            </article>
           </div>
         </section>
       </section>
@@ -2126,7 +2129,7 @@
     function getRouteHash() {
       if (state.page === "team") return "#team";
       if (state.page === "workspace") return `#workspace/${state.systemId}/${state.siteId}`;
-      return "#home";
+      return "#about";
     }
 
     function updateRouteHash({ replace = false } = {}) {
@@ -2162,8 +2165,13 @@
       const parts = rawHash.split("/").map(part => decodeURIComponent(part || ""));
       const [first, second, third] = parts;
 
-      if (first === "home" || first === "team") {
-        state.page = first;
+      if (first === "about" || first === "home") {
+        state.page = "home";
+        return true;
+      }
+
+      if (first === "team") {
+        state.page = "team";
         return true;
       }
 
