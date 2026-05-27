@@ -1710,13 +1710,41 @@
 
     @media print {
       body { background: #fff; }
-      .topbar, .panel, .viewer-frame-wrap, .nav-actions, .admin-panel, .footer, .site-grid { display: none !important; }
+      .topbar, .panel, .nav-actions, .admin-panel, .footer, .site-grid { display: none !important; }
       .container { width: 100%; padding: 0; }
       .hero { display: block; }
       .hero-card, .patient-card, .viewer-card, .side-card { box-shadow: none; border: 1px solid #bbb; break-inside: avoid; }
       .workspace { display: block; }
       .side-column { display: block; }
       .print-only { display: block; }
+
+      /* Keep the embedded anatomy viewer visible in the printed summary. */
+      .viewer-frame-wrap {
+        display: block !important;
+        position: relative !important;
+        width: 100% !important;
+        height: 520px !important;
+        min-height: 520px !important;
+        max-height: none !important;
+        aspect-ratio: auto !important;
+        overflow: hidden !important;
+        border: 1px solid #bbb !important;
+        border-radius: 12px !important;
+        background: #f1f5f7 !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      iframe.model-frame {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: 0 !important;
+      }
+
+      .empty-viewer {
+        display: grid !important;
+      }
     }
 
 
