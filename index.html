@@ -1270,13 +1270,58 @@
 
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      align-items: stretch;
     }
-    .team-card { padding: 20px; }
-    .team-card h3 { margin-bottom: 8px; letter-spacing: -0.03em; }
-    .team-role-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-    .team-card p { color: var(--muted); margin-bottom: 10px; }
+
+    .team-card {
+      padding: 0;
+      overflow: hidden;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .team-name-band {
+      padding: 14px 12px 12px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(47, 127, 136, 0.18), rgba(119, 100, 216, 0.13));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .team-name-band h3 {
+      margin: 0 0 8px;
+      letter-spacing: -0.03em;
+      font-size: 1.02rem;
+      line-height: 1.14;
+      color: var(--ink);
+    }
+
+    .team-card-body {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      background: rgba(255, 255, 255, 0.42);
+    }
+
+    .team-role-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin: 0;
+    }
+
+    .team-card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.80rem;
+      line-height: 1.36;
+    }
+
     .team-role-row .team-role { margin-bottom: 0; }
 
     .team-role {
@@ -1284,14 +1329,71 @@
       align-items: center;
       width: fit-content;
       border-radius: 999px;
-      padding: 6px 10px;
-      margin-bottom: 10px;
+      padding: 4px 8px;
+      margin-bottom: 8px;
       color: var(--primary-dark);
-      background: var(--primary-soft);
-      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(47, 127, 136, 0.18);
+      font-size: 0.64rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+    }
+
+    .team-meta-list {
+      display: grid;
+      gap: 4px;
+      margin: 0;
+    }
+
+    .team-meta-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px;
+      align-items: baseline;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.28;
+    }
+
+    .team-meta-label {
+      color: var(--primary-dark);
+      font-size: 0.64rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .team-meta-value {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .team-contact-btn {
+      width: 100%;
+      margin-top: 0;
+      padding: 7px 10px;
+      font-size: 0.78rem;
+    }
+
+    .team-connect-card {
+      margin-top: 16px;
+      padding: clamp(18px, 3vw, 26px);
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(47, 127, 136, 0.16), rgba(119, 100, 216, 0.12));
+    }
+
+    .team-connect-card p {
+      color: var(--muted);
+      margin: 0;
+      max-width: 78ch;
+    }
+
+    .team-connect-card .btn {
+      width: fit-content;
     }
 
     @media (max-width: 1320px) {
@@ -2087,22 +2189,58 @@
 
           <div class="team-grid">
             <article class="team-card side-card">
-              <h3>Ugoma Onubogu, MD, PhD</h3>
-              <div class="team-role-row" aria-label="Project roles">
-                <span class="team-role">Developer</span>
-                <span class="team-role">Founder</span>
+              <div class="team-name-band">
+                <h3>Ugoma Onubogu, MD, PhD</h3>
+                <div class="team-role-row" aria-label="Project roles">
+                  <span class="team-role">Developer</span>
+                  <span class="team-role">Founder</span>
+                </div>
               </div>
-             
+              <div class="team-card-body">
+                <div class="team-meta-list" aria-label="Team member details">
+                  <div class="team-meta-item"><span class="team-meta-label">Institution</span><span class="team-meta-value">Add institution</span></div>
+                  <div class="team-meta-item"><span class="team-meta-label">Department</span><span class="team-meta-value">Add department</span></div>
+                </div>
+                <a class="btn small team-contact-btn" href="mailto:" aria-label="Contact Ugoma Onubogu">Contact</a>
+              </div>
             </article>
 
             <article class="team-card side-card">
-              <span class="team-role">Current build</span>
-              <h3>MVP clinical prototype</h3>
-              <p>This version is a static GitHub-hosted MVP. It does not store patient data on a server and is intended for education, shared decision support, and demonstration workflows.</p>
-              <p>Future iterations may include expanded site-specific setup images, more validated symptom timelines, additional clinician note templates, and institution-specific patient instructions.</p>
+              <div class="team-name-band">
+                <h3>Additional contributor</h3>
+                <div class="team-role-row" aria-label="Project roles">
+                  <span class="team-role">Developer</span>
+                  <span class="team-role">Contributor</span>
+                </div>
+              </div>
+              <div class="team-card-body">
+                <div class="team-meta-list" aria-label="Team member details">
+                  <div class="team-meta-item"><span class="team-meta-label">Institution</span><span class="team-meta-value">Add institution</span></div>
+                  <div class="team-meta-item"><span class="team-meta-label">Department</span><span class="team-meta-value">Add department</span></div>
+                </div>
+                <a class="btn small team-contact-btn" href="mailto:" aria-label="Contact additional contributor">Contact</a>
+              </div>
+            </article>
+
+            <article class="team-card side-card">
+              <div class="team-name-band">
+                <h3>MVP clinical prototype</h3>
+                <div class="team-role-row" aria-label="Project status">
+                  <span class="team-role">Current build</span>
+                </div>
+              </div>
+              <div class="team-card-body">
+                <p>Static GitHub-hosted MVP for education, shared decision support, and demonstration workflows. No patient data is stored on a server.</p>
+                <a class="btn small team-contact-btn" href="#workspace" aria-label="Open workspace">Open workspace</a>
+              </div>
             </article>
 
           </div>
+
+          <section class="team-connect-card side-card" aria-label="Connect with us">
+            <p>OncoGuide 3D is being built to elevate radiation oncology education and continue improving how clinicians explain treatment. Feedback, collaboration, clinical insight, and implementation ideas are welcome.</p>
+            <a class="btn primary" href="mailto:" aria-label="Connect with the OncoGuide 3D team">Connect with us</a>
+          </section>
         </section>
       </section>
 
@@ -2115,7 +2253,7 @@
 
     <footer class="footer">
       <div class="footer-inner">
-        <span>© 2026  OncoGuide 3D. All rights reserved.</span>
+        <span>OncoGuide 3D MVP. © 2026 Ugoma Onubogu. All rights reserved.</span>
         <button class="btn small footer-manage-btn" id="embedManagerBtn" type="button">Manage model links</button>
         <span>Static GitHub repository. No patient data is stored on a server.</span>
         <span>BioDigital models require published iframe links and appropriate account/domain permissions.</span>
@@ -2835,7 +2973,7 @@
     }
 
     function updateTreatmentCourse() {
-      if (!$('courseSimText') || !$('courseTreatmentText') || !$('courseFollowText') || !$('courseSummary')) return;
+      if (!$('courseSimText') || !$('courseTreatmentText') || !$('courseFollowText')) return;
 
       const system = activeSystem();
       const site = activeSite();
@@ -2854,10 +2992,10 @@
         $('courseTreatmentText').textContent = isBrachytherapy
           ? `Radiation is delivered with applicators or sources placed near the target.`
           : `Each session uses the completed treatment plan to accurately position and deliver radiation to the target area.`;
-        $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to ${site.name.toLowerCase()} using ${technique}.`;
+        if ($('courseSummary')) $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to ${site.name.toLowerCase()} using ${technique}.`;
       } else {
         $('courseTreatmentText').textContent = `Treatment delivery follows the finalized plan and technique.`;
-        $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to the selected site.`;
+        if ($('courseSummary')) $('courseSummary').innerHTML = `<b>Course overview:</b> Planning, treatment delivery, and follow-up are tailored to the selected site.`;
       }
 
       $('courseFollowText').textContent = `Recovery, side effects, and surveillance are reviewed after treatment.`;
