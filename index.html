@@ -1196,6 +1196,17 @@
 
     .embed-editor strong { display: block; margin-bottom: 7px; }
 
+
+    .workspace-print-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    .workspace-print-row .btn {
+      width: fit-content;
+    }
+
     .footer {
       border-top: 1px solid var(--line);
       padding: 18px 0 34px;
@@ -1954,7 +1965,6 @@
             <button class="page-tab" type="button" data-page-tab="workspace">Workspace</button>
             <button class="page-tab" type="button" data-page-tab="team">Team</button>
           </div>
-          <button class="btn primary small" onclick="window.print()" type="button">Print summary</button>
         </div>
       </div>
     </header>
@@ -2192,6 +2202,9 @@
           <label class="sr-only" for="clinicianNotes">Clinician notes</label>
           <textarea id="clinicianNotes" rows="5" placeholder="Example: Review left parietal lesion location, explain mask setup, discuss fatigue and skin care."></textarea>
         </div>
+        <div class="workspace-print-row">
+          <button class="btn primary small" onclick="window.print()" type="button">Print summary</button>
+        </div>
 
       </section>
 
@@ -2267,7 +2280,7 @@
 
     <footer class="footer">
       <div class="footer-inner">
-        <span>© 2026 OncoGuide 3D. All rights reserved.</span>
+        <span>OncoGuide 3D MVP. © 2026 Ugoma Onubogu. All rights reserved.</span>
         <button class="btn small footer-manage-btn" id="embedManagerBtn" type="button">Manage model links</button>
         <span>Static GitHub repository. No patient data is stored on a server.</span>
         <span>BioDigital models require published iframe links and appropriate account/domain permissions.</span>
