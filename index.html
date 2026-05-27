@@ -1207,9 +1207,19 @@
       width: min(1440px, calc(100% - 32px));
       margin: 0 auto;
       display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 14px;
       flex-wrap: wrap;
+    }
+
+
+
+    .footer-manage-btn {
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      box-shadow: none;
+      background: rgba(255, 255, 255, 0.62);
     }
 
     .print-only { display: none; }
@@ -1682,7 +1692,6 @@
             <button class="page-tab" type="button" data-page-tab="workspace">Workspace</button>
             <button class="page-tab" type="button" data-page-tab="team">Team</button>
           </div>
-          <button class="btn small" id="embedManagerBtn" type="button">Manage model links</button>
           <button class="btn primary small" onclick="window.print()" type="button">Print summary</button>
         </div>
       </div>
@@ -1960,6 +1969,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <span>OncoGuide 3D MVP. © 2026 Ugoma Onubogu. All rights reserved.</span>
+        <button class="btn small footer-manage-btn" id="embedManagerBtn" type="button">Manage model links</button>
         <span>Static GitHub repository. No patient data is stored on a server.</span>
         <span>BioDigital models require published iframe links and appropriate account/domain permissions.</span>
       </div>
