@@ -96,7 +96,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 14px 0;
+      padding: 6px 0;
     }
 
     .brand {
@@ -1593,10 +1593,15 @@
     }
 
 
-    /* Header logo image */
+    /* Header logo image: keep logo size, reduce banner padding above/below */
     .topbar .brand {
       gap: 0;
       align-items: center;
+    }
+
+    .topbar-inner {
+      padding-top: 6px;
+      padding-bottom: 6px;
     }
 
     .brand-logo {
