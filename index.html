@@ -1270,22 +1270,24 @@
 
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 260px));
+      gap: 14px;
       align-items: stretch;
+      justify-content: start;
     }
 
     .team-card {
       padding: 0;
       overflow: hidden;
       min-height: 0;
+      min-height: 245px;
       display: grid;
       grid-template-rows: auto 1fr;
       background: rgba(255, 255, 255, 0.78);
     }
 
     .team-name-band {
-      padding: 14px 12px 12px;
+      padding: 16px 12px 14px;
       text-align: center;
       background: linear-gradient(135deg, rgba(47, 127, 136, 0.18), rgba(119, 100, 216, 0.13));
       border-bottom: 1px solid var(--line);
@@ -1297,10 +1299,13 @@
       font-size: 1.02rem;
       line-height: 1.14;
       color: var(--ink);
+      min-height: 2.3em;
+      display: grid;
+      place-items: center;
     }
 
     .team-card-body {
-      padding: 12px;
+      padding: 14px;
       display: grid;
       gap: 10px;
       align-content: start;
@@ -1348,8 +1353,8 @@
 
     .team-meta-item {
       display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 6px;
+      grid-template-columns: 1fr;
+      gap: 2px;
       align-items: baseline;
       color: var(--muted);
       font-size: 0.78rem;
@@ -1371,7 +1376,7 @@
 
     .team-contact-btn {
       width: 100%;
-      margin-top: 0;
+      margin-top: 4px;
       padding: 7px 10px;
       font-size: 0.78rem;
     }
@@ -1389,11 +1394,21 @@
     .team-connect-card p {
       color: var(--muted);
       margin: 0;
-      max-width: 78ch;
+      max-width: 82ch;
     }
 
     .team-connect-card .btn {
       width: fit-content;
+    }
+
+    @media (max-width: 620px) {
+      .team-grid {
+        grid-template-columns: minmax(0, 1fr);
+        justify-content: stretch;
+      }
+      .team-card {
+        min-height: 0;
+      }
     }
 
     @media (max-width: 1320px) {
@@ -2237,7 +2252,7 @@
           </div>
 
           <section class="team-connect-card side-card" aria-label="Connect with us">
-            <p>OncoGuide 3D is being built to elevate radiation oncology education and continue improving how clinicians explain treatment. Feedback, collaboration, clinical insight, and implementation ideas are welcome.</p>
+            <p>OncoGuide 3D is being built to elevate radiation oncology education, strengthen health literacy, and continue improving how clinicians explain treatment. Feedback, collaboration, clinical insight, and implementation ideas are welcome.</p>
             <a class="btn primary" href="mailto:" aria-label="Connect with the OncoGuide 3D team">Connect with us</a>
           </section>
         </section>
