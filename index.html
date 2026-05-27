@@ -1592,70 +1592,90 @@
 
     @media (max-width: 980px) {
       .team-layout { grid-template-columns: 1fr; }
-      .nav-actions {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 8px;
-      }
-      .page-tabs {
-        order: 3;
-        width: auto;
-        max-width: 100%;
-        justify-content: flex-start;
-        padding: 3px;
-        gap: 4px;
-        overflow-x: auto;
-        scrollbar-width: none;
-      }
-      .page-tabs::-webkit-scrollbar { display: none; }
-      .page-tab {
-        padding: 6px 9px;
-        font-size: 0.78rem;
-      }
-    }
 
-    @media (max-width: 640px) {
       .topbar-inner {
         flex-direction: column;
         align-items: stretch;
       }
+
       .brand {
         align-self: flex-start;
       }
+
       .nav-actions {
+        width: 100%;
+        display: flex;
         justify-content: flex-end;
         align-items: center;
-        width: 100%;
         flex-wrap: nowrap;
+        gap: 8px;
+        min-width: 0;
       }
+
       .page-tabs {
         order: 0;
         width: fit-content;
-        max-width: min(100%, 320px);
+        max-width: min(100%, 340px);
         flex: 0 1 auto;
         justify-content: flex-end;
+        padding: 3px;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        white-space: nowrap;
       }
+
+      .page-tabs::-webkit-scrollbar { display: none; }
+
+      .page-tab {
+        padding: 6px 9px;
+        font-size: 0.78rem;
+      }
+
       .nav-actions > .btn {
         flex: 0 0 auto;
+        margin-left: 0;
       }
+    }
+
+    @media (max-width: 640px) {
+      .nav-actions {
+        justify-content: flex-end;
+        gap: 6px;
+      }
+
+      .page-tabs {
+        max-width: min(72vw, 286px);
+        padding: 2px;
+        gap: 3px;
+      }
+
       .page-tab {
-        padding: 5px 8px;
-        font-size: 0.74rem;
+        padding: 5px 7px;
+        font-size: 0.72rem;
+      }
+
+      .nav-actions > .btn {
+        padding: 7px 9px;
+        font-size: 0.78rem;
       }
     }
 
     @media (max-width: 420px) {
       .page-tabs {
-        max-width: 100%;
-        gap: 3px;
-        padding: 2px;
+        max-width: min(68vw, 242px);
       }
+
       .page-tab {
-        padding: 5px 7px;
-        font-size: 0.7rem;
+        padding: 5px 6px;
+        font-size: 0.68rem;
+      }
+
+      .nav-actions > .btn {
+        padding: 7px 8px;
+        font-size: 0.72rem;
       }
     }
-
 
     /* Header logo image: keep logo size, reduce banner padding above/below */
     .topbar .brand {
@@ -1957,7 +1977,6 @@
               <span class="team-role">Developer and founder</span>
               <h3>Ugoma Onubogu, MD, PhD</h3>
               <p>Founder, developer, and clinical content lead for OncoGuide 3D.</p>
-              <p>The project is built around the clinical need to translate radiation oncology planning, anatomy, patient setup, expected side effects, and follow-up into clearer point-of-care conversations.</p>
             </article>
 
             <article class="team-card side-card">
@@ -1980,10 +1999,8 @@
 
     <footer class="footer">
       <div class="footer-inner">
-        <span>OncoGuide 3D MVP. © 2026 Ugoma Onubogu. All rights reserved.</span>
+        <span>© 2026 OncoGuide 3D. All rights reserved.</span>
         <button class="btn small footer-manage-btn" id="embedManagerBtn" type="button">Manage model links</button>
-        <span>Static GitHub repository. No patient data is stored on a server.</span>
-        <span>BioDigital models require published iframe links and appropriate account/domain permissions.</span>
       </div>
     </footer>
   </div>
